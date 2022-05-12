@@ -26,6 +26,11 @@ public class Position {
 
     @Override
     public boolean equals(Object otherObject) {
-        return false;
+        if (this == otherObject) return true;
+        if (otherObject == null) return false;
+        if (getClass() != otherObject.getClass()) return false;
+
+        Position other = (Position) otherObject;
+        return (this.x == other.x) && (this.y == other.y);
     }
 }
