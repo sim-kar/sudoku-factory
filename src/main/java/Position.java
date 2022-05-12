@@ -12,11 +12,11 @@ public class Position {
     }
 
     public int getX() {
-        return -1;
+        return this.x;
     }
 
     public int getY() {
-        return -1;
+        return this.y;
     }
 
     @Override
