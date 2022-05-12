@@ -21,7 +21,7 @@ public class Position {
 
     @Override
     public int hashCode() {
-        return -1;
+        return this.hashCode;
     }
 
     @Override
