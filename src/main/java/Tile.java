@@ -31,7 +31,7 @@ public interface Tile {
      * Sets the current value of the cell
      * @param value
      */
-    public void SetCurrentVal(int value);
+    public void setCurrentVal(int value);
 
     /**
      * Clears the entered value

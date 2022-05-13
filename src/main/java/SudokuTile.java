@@ -3,9 +3,13 @@ public class SudokuTile implements Tile{
     int curVal = 0;
     int corVal = 0;
 
+    public SudokuTile(int corVal) {
+        this.corVal = corVal;
+    }
+
     @Override
     public int getCorrectVal() {
-        return 0;
+        return corVal;
     }
 
     @Override
@@ -24,8 +28,8 @@ public class SudokuTile implements Tile{
     }
 
     @Override
-    public void SetCurrentVal(int value) {
-        this.curVal = value;
+    public void setCurrentVal(int value) {
+        if (this.editable) this.curVal = value;
     }
 
     @Override
