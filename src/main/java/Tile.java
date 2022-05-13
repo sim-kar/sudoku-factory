@@ -1,46 +1,54 @@
 /**
- * A tile in a game board that contains a correct value, and a editable value input from user
+ * A tile in on game board that contains a correct value, and a current value.
+ * A tile can be made editable, which will clear it's current value. The current value can be
+ * changed if it is editable, and it can be compared to the correct value to see if they match.
  */
 public interface Tile {
 
     /**
      * Get the correct value for the tile
+     *
      * @return the correct value
      */
-    public int getCorrectValue();
+    int getCorrectValue();
 
     /**
      * Sets whether tile is editable
+     *
      * @param editable true or false
      */
-    public void setEditable(boolean editable);
+    void setEditable(boolean editable);
 
     /**
      * Get whether the tile is editable
+     *
      * @return whether the tile is editable
      */
-    public boolean isEditable();
+    boolean isEditable();
 
     /**
      * Get the current value (user input) of the cell
+     *
      * @return the current value
      */
-    public int getCurrentValue();
+    int getCurrentValue();
 
     /**
-     * Sets the current value of the cell
+     * Sets the current value of the cell, if the tile is editable
+     *
      * @param value of the cell
      */
-    public void setCurrentValue(int value);
+    void setCurrentValue(int value);
 
     /**
-     * Clears the entered value
+     * Clears the entered value if the tile is editable
      */
-    public void clear();
+    void clear();
 
     /**
      * Checks whether the entered value (current value) equals the correct value
+     *
      * @return whether current value is the correct value
      */
-    public boolean check();
+    boolean check();
 }
