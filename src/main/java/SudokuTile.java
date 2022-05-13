@@ -1,15 +1,15 @@
 public class SudokuTile implements Tile{
     boolean editable = true;
-    int curVal = 0;
-    int corVal = 0;
+    int curValue = 0;
+    int corValue = 0;
 
-    public SudokuTile(int corVal) {
-        this.corVal = corVal;
+    public SudokuTile(int corValue) {
+        this.corValue = corValue;
     }
 
     @Override
-    public int getCorrectVal() {
-        return corVal;
+    public int getCorrectValue() {
+        return corValue;
     }
 
     @Override
@@ -23,22 +23,22 @@ public class SudokuTile implements Tile{
     }
 
     @Override
-    public int getCurrentVal() {
-        return curVal;
+    public int getCurrentValue() {
+        return curValue;
     }
 
     @Override
-    public void setCurrentVal(int value) {
-        if (this.editable) this.curVal = value;
+    public void setCurrentValue(int value) {
+        if (this.editable) this.curValue = value;
     }
 
     @Override
     public void clear() {
-        this.curVal = 0;
+        this.curValue = 0;
     }
 
     @Override
     public boolean check() {
-        return curVal == corVal;
+        return curValue == corValue;
     }
 }
