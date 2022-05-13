@@ -84,6 +84,7 @@ class SudokuTileTest {
     @DisplayName("Different current and correct number should return false")
     void sameCurrentCorrectValueIsFalse() {
         tile = new SudokuTile(1);
+        tile.setEditable(true);
         tile.setCurrentValue(9);
         assertFalse(tile.check());
     }

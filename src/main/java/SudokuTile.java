@@ -1,5 +1,5 @@
 public class SudokuTile implements Tile {
-    boolean editable = true;
+    boolean editable = false;
     int currentValue;
     int correctValue;
 
