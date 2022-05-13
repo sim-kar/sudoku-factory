@@ -2,77 +2,89 @@ import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class SudokuTileTest {
-    SudokuTile sTile;
-    int maxNumber = 9;   // Highest number to test for a tile
+    SudokuTile tile;
 
     @Test
     @DisplayName("Comparing the retrieved correct number with the one set")
     void compareCorrectNumber() {
-        int value = 1;
-        sTile = new SudokuTile(value);
-        assertEquals(value, sTile.getCorrectValue());
+        tile = new SudokuTile(1);
+        assertEquals(1, tile.getCorrectValue());
 
-        sTile = new SudokuTile(maxNumber);
-        assertEquals(maxNumber, sTile.getCorrectValue());
+        tile = new SudokuTile(9);
+        assertEquals(9, tile.getCorrectValue());
     }
 
     @Test
     @DisplayName("Tests setting and getting the editable field")
     void SetGetEditable() {
-        sTile = new SudokuTile(1);
+        tile = new SudokuTile(1);
 
-        sTile.setEditable(true);
-        Assertions.assertEquals(true, sTile.isEditable());
+        tile.setEditable(true);
+        assertTrue(tile.isEditable());
 
-        sTile.setEditable(false);
-        Assertions.assertEquals(false, sTile.isEditable());
+        tile.setEditable(false);
+        assertFalse(tile.isEditable());
     }
 
     @Test
     @DisplayName("Set and get number of current value")
     void setGetCurrentVal() {
-        SudokuTile sTile = new SudokuTile(1);
-        sTile.setEditable(true);
-        sTile.setCurrentValue(1);
-        Assertions.assertEquals(1, sTile.getCurrentValue());
+        tile = new SudokuTile(1);
+        tile.setEditable(true);
+        tile.setCurrentValue(1);
+        assertEquals(1, tile.getCurrentValue());
 
-        sTile.setCurrentValue(maxNumber);
-        Assertions.assertEquals(maxNumber, sTile.getCurrentValue());
+        tile.setCurrentValue(9);
+        assertEquals(9, tile.getCurrentValue());
     }
 
     @Test
     @DisplayName("Test that it is not possible to change current number while isEditable is false")
     void setCurrentNotEditable() {
-        sTile = new SudokuTile(1);
-        sTile.setEditable(true);
-        sTile.setCurrentValue(1);
-        sTile.setEditable(false);
-        sTile.setCurrentValue(2);
-        Assertions.assertEquals(1, sTile.getCurrentValue());
+        tile = new SudokuTile(1);
+        tile.setEditable(true);
+        tile.setCurrentValue(1);
+        tile.setEditable(false);
+        tile.setCurrentValue(2);
+        Assertions.assertEquals(1, tile.getCurrentValue());
     }
 
     @Test
-    @DisplayName("Check that a cleared tile returns the current value of 0")
-    void clear() {
-        sTile = new SudokuTile(1);
-        sTile.setCurrentValue(1);
-        sTile.clear();
-        Assertions.assertEquals(0, sTile.getCurrentValue());
+    @DisplayName("Clearing an editable tile should return a current value of 0")
+    void canClearEditable() {
+        tile = new SudokuTile(1);
+        tile.setEditable(true);
+        tile.setCurrentValue(1);
+        tile.clear();
+        Assertions.assertEquals(0, tile.getCurrentValue());
 
-        sTile.setCurrentValue(9);
-        sTile.clear();
-        Assertions.assertEquals(0, sTile.getCurrentValue());
+        tile.setCurrentValue(9);
+        tile.clear();
+        Assertions.assertEquals(0, tile.getCurrentValue());
     }
 
     @Test
-    @DisplayName("Check if the current number is the correct number")
-    void checkCurrentCorrectValue() {
-        sTile = new SudokuTile(1);
-        sTile.setCurrentValue(1);
-        Assertions.assertEquals(true, sTile.check());
+    @DisplayName("Clearing an non-editable tile should not change the current value")
+    void cannotClearNonEditable() {
+        tile = new SudokuTile(1);
+        tile.setEditable(false);
+        tile.clear();
+        Assertions.assertEquals(1, tile.getCurrentValue());
+    }
 
-        sTile.setCurrentValue(9);
-        Assertions.assertEquals(false, sTile.check());
+    @Test
+    @DisplayName("Same current and correct number should return true")
+    void sameCurrentCorrectValueIsTrue() {
+        tile = new SudokuTile(1);
+        tile.setCurrentValue(1);
+        assertTrue(tile.check());
+    }
 
+    @Test
+    @DisplayName("Different current and correct number should return false")
+    void sameCurrentCorrectValueIsFalse() {
+        tile = new SudokuTile(1);
+        tile.setCurrentValue(9);
+        assertFalse(tile.check());
     }
 }
