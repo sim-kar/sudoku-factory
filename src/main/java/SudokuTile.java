@@ -35,7 +35,7 @@ public class SudokuTile implements Tile {
 
     @Override
     public void clear() {
-        this.curValue = 0;
+        if (isEditable()) this.currentValue = 0;
     }
 
     @Override
