@@ -4,6 +4,12 @@ public class SudokuTile implements Tile {
     int currentValue;
     int correctValue;
 
+    /**
+     * Creates a SudokuTile with a certain value at a certain position
+     *
+     * @param value the value of the SudokuTile
+     * @param position the position of the SudokuTile
+     */
     public SudokuTile(int value, Position position) {
         this.correctValue = value;
         this.currentValue = value;
