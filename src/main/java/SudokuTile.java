@@ -1,11 +1,17 @@
 public class SudokuTile implements Tile {
+    Position position;
     boolean editable = false;
     int currentValue;
     int correctValue;
 
-    public SudokuTile(int value) {
+    public SudokuTile(int value, Position position) {
         this.correctValue = value;
         this.currentValue = value;
+        this.position = position;
+    }
+
+    public Position getPosition() {
+        return position;
     }
 
     @Override
