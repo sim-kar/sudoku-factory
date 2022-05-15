@@ -1,3 +1,4 @@
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -7,7 +8,7 @@ import java.util.Set;
  */
 public class SudokuSection implements Section{
 
-    private Map<Position, Tile> tiles;
+    private Map<Position, Tile> tiles = new HashMap<>();
 
     /**
      * Adding all the passed Tiles to a Map, with everyone's Position as its key.
@@ -22,7 +23,7 @@ public class SudokuSection implements Section{
 
     @Override
     public Tile getTile(Position xy) {
-        return null;
+        return tiles.get(xy);
     }
 
     @Override
