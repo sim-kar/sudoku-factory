@@ -1,4 +1,5 @@
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -28,7 +29,9 @@ public class SudokuSection implements Section{
 
     @Override
     public Set<Tile> getTiles() {
-        return null;
+        Set<Tile> allTiles = new HashSet<>();
+        tiles.forEach((position, tile) -> allTiles.add(tile));
+        return allTiles;
     }
 
     @Override
