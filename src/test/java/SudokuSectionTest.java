@@ -23,6 +23,26 @@ public class SudokuSectionTest {
         Assertions.assertEquals(tile1, section.getTile(new Position(2,2)));
         Assertions.assertEquals(tile2, section.getTile(new Position(2,5)));
         Assertions.assertEquals(tile3, section.getTile(new Position(9,9)));
+    }
+
+    @Test
+    @DisplayName("Creating a Section and getting all Tiles from it")
+    public void createdSectionReturnsCorrectTiles() {
+        Set<Tile> tiles = new HashSet<>();
+
+        Tile tile1 = new SudokuTile(1, new Position(2,2));
+        Tile tile2 = new SudokuTile(5, new Position(2,5));
+        Tile tile3 = new SudokuTile(8, new Position(9,9));
+
+        tiles.add(tile1);
+        tiles.add(tile2);
+        tiles.add(tile3);
+
+        SudokuSection section = new SudokuSection(tiles);
+        Set<Tile> returnedTiles = new HashSet<>();
+        returnedTiles = section.getTiles();
+
+        Assertions.assertEquals(tiles, returnedTiles);
 
     }
 }
