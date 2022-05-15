@@ -1,4 +1,5 @@
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import java.util.HashSet;
@@ -6,19 +7,24 @@ import java.util.Set;
 
 
 public class SudokuSectionTest {
-    @Test
-    @DisplayName("Creating a Section and getting a Tile at a specific position")
-    public void createdSectionReturnsCorrectTile() {
-        Set<Tile> tiles = new HashSet<>();
+    Set<Tile> tiles;
+    Tile tile1, tile2, tile3;
 
-        Tile tile1 = new SudokuTile(1, new Position(2,2));
-        Tile tile2 = new SudokuTile(5, new Position(2,5));
-        Tile tile3 = new SudokuTile(8, new Position(9,9));
+    @BeforeEach
+    public void setupFakeSet() {
+        tiles = new HashSet<>();
+        tile1 = new SudokuTile(1, new Position(2,2));
+        tile2 = new SudokuTile(5, new Position(2,5));
+        tile3 = new SudokuTile(8, new Position(9,9));
 
         tiles.add(tile1);
         tiles.add(tile2);
         tiles.add(tile3);
+    }
 
+    @Test
+    @DisplayName("Creating a Section and getting a Tile at a specific position")
+    public void createdSectionReturnsCorrectTile() {
         SudokuSection section = new SudokuSection(tiles);
         Assertions.assertEquals(tile1, section.getTile(new Position(2,2)));
         Assertions.assertEquals(tile2, section.getTile(new Position(2,5)));
@@ -28,21 +34,26 @@ public class SudokuSectionTest {
     @Test
     @DisplayName("Creating a Section and getting all Tiles from it")
     public void createdSectionReturnsCorrectTiles() {
-        Set<Tile> tiles = new HashSet<>();
-
-        Tile tile1 = new SudokuTile(1, new Position(2,2));
-        Tile tile2 = new SudokuTile(5, new Position(2,5));
-        Tile tile3 = new SudokuTile(8, new Position(9,9));
-
-        tiles.add(tile1);
-        tiles.add(tile2);
-        tiles.add(tile3);
-
         SudokuSection section = new SudokuSection(tiles);
-        Set<Tile> returnedTiles = new HashSet<>();
+        Set<Tile> returnedTiles;
         returnedTiles = section.getTiles();
 
         Assertions.assertEquals(tiles, returnedTiles);
+    }
 
+    @Test
+    @DisplayName("Creating a Section of Tiles that all have correct values")
+    public void createdSectionHasOnlyCorrectValues() {
+        SudokuSection section = new SudokuSection(tiles);
+        Assertions.assertTrue(section.isCorrect());
+    }
+
+    @Test
+    @DisplayName("Creating a Section of Tiles that NOT all have correct values")
+    public void createdSectionHasIncorrectValues() {
+        tile3.setEditable(true);
+        tile3.setCurrentValue(9);
+        SudokuSection section = new SudokuSection(tiles);
+        Assertions.assertFalse(section.isCorrect());
     }
 }
