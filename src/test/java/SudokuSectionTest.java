@@ -56,4 +56,26 @@ public class SudokuSectionTest {
         SudokuSection section = new SudokuSection(tiles);
         Assertions.assertFalse(section.isCorrect());
     }
+
+    @Test
+    @DisplayName("Creating a Section of Tiles that NOT all have correct values, and get the incorrect ones")
+    public void createdSectionHasIncorrectValuesReturnsIncorrectTiles() {
+        tile3.setEditable(true);
+        tile3.setCurrentValue(9);
+        SudokuSection section = new SudokuSection(tiles);
+
+        Set<Tile> correctTiles = new HashSet<>();
+        correctTiles.add(tile1);
+        correctTiles.add(tile2);
+
+        Assertions.assertEquals(correctTiles, section.getIncorrectTiles());
+    }
+
+    @Test
+    @DisplayName("Creating a Section of Tiles that all have correct values, and get the incorrect ones")
+    public void createdSectionHasCorrectValuesReturnsNull() {
+        SudokuSection section = new SudokuSection(tiles);
+        Assertions.assertEquals(null, section.getIncorrectTiles());
+    }
+
 }
