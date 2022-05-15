@@ -36,7 +36,11 @@ public class SudokuSection implements Section{
 
     @Override
     public boolean isCorrect() {
-        return false;
+        for (Tile tile : tiles.values()) {
+            if (!tile.check()) return false;
+        }
+
+        return true;
     }
 
     @Override
