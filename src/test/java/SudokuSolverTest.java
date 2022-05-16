@@ -45,6 +45,30 @@ class SudokuSolverTest {
         assertThrows(IllegalArgumentException.class, () -> solver.generate(empty));
     }
 
+    @Test
+    @DisplayName("Generating a solution from input with duplicates in row throws error")
+    void duplicatesInRowInInputToGenerateSolutionThrowsError() {
+        empty[0][0] = 1;
+        empty[0][8] = 1;
+        assertThrows(IllegalArgumentException.class, () -> solver.generate(empty));
+    }
+
+    @Test
+    @DisplayName("Generating a solution from input with duplicates in column throws error")
+    void duplicatesInColumnInInputToGenerateSolutionThrowsError() {
+        empty[0][0] = 1;
+        empty[8][0] = 1;
+        assertThrows(IllegalArgumentException.class, () -> solver.generate(empty));
+    }
+
+    @Test
+    @DisplayName("Generating a solution from input with duplicates in block throws error")
+    void duplicatesInBlockInInputToGenerateSolutionThrowsError() {
+        empty[0][0] = 1;
+        empty[2][2] = 1;
+        assertThrows(IllegalArgumentException.class, () -> solver.generate(empty));
+    }
+
     @Nested
     @DisplayName("Sudoku Rules")
     class SudokuRulesTest {
