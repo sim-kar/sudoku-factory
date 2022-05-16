@@ -22,23 +22,24 @@ public interface Board {
     public Section getRow(Position xy);
 
     /**
-     * Gets a Section representing a vertical row (column)
+     * Gets a Section representing a vertical line (column)
      *
      * @param x The X-position of the column
-     * @return The Section for the col
+     * @return The Section for the column
      */
     public Section getColumn(int x);
 
     /**
-     * Gets a Section representing a vertical row (column)
+     * Gets a Section representing a vertical line (column)
      *
-     * @param xy The Position of any Tile on the row
+     * @param xy The Position of any Tile on the column
      * @return The Section for the column
      */
     public Section getColumn(Position xy);
 
     /**
      * Get a Section representing a block
+     *
      * @param xy The position of any Tile in the block
      * @return The Section for the block
      */
@@ -53,7 +54,7 @@ public interface Board {
     public Tile getTile(Position xy);
 
     /**
-     * Sets the value of the Tile at the specified position
+     * Sets the value of the Tile at the specified position, only if the Tile is editable
      *
      * @param xy The Position of the Tile
      * @param value The the new value of the Tile
@@ -61,9 +62,9 @@ public interface Board {
     public void setTile(Position xy, int value);
 
     /**
-     * Checks whether the passed value is the correct value for the Tile at passed Position.
+     * Checks whether all Tiles have the correct value
      *
-     * @return Whether the value is correct
+     * @return Whether all Tiles have the correct value
      */
     public boolean isCorrect();
 
@@ -75,7 +76,7 @@ public interface Board {
     public List<Section> getIncorrectSections();
 
     /**
-     * Clears the values of all Tiles of the Board
+     * Clears the values of all Tiles of the Board that are editable.
      */
     public void clear();
 }
