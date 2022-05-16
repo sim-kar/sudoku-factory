@@ -45,6 +45,10 @@ public class SudokuSection implements Section{
 
     @Override
     public Set<Tile> getIncorrectTiles() {
-        return null;
+        Set<Tile> incorrectTiles = new HashSet<>();
+        for (Tile tile : tiles.values()) {
+            if (!tile.check()) incorrectTiles.add(tile);
+        }
+        return incorrectTiles;
     }
 }
