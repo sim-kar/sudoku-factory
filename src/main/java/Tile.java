@@ -51,4 +51,11 @@ public interface Tile {
      * @return whether current value is the correct value
      */
     boolean check();
+
+    /**
+     * Get the Position of the Tile
+     *
+     * @return the Position
+     */
+    public Position getPosition();
 }
