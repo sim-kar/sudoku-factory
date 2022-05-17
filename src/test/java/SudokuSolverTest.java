@@ -72,7 +72,20 @@ class SudokuSolverTest {
     @Nested
     @DisplayName("Sudoku Rules")
     class SudokuRulesTest {
-        int[][] solution = solver.generate(empty);
+        Solver solver;
+        int[][] empty;
+        int[][] solution;
+
+        @BeforeEach
+        void setup() {
+            Random random = new Random(0L);
+            solver = new SudokuSolver(random);
+            empty = new int[9][9];
+            for (int[] row : empty) {
+                Arrays.fill(row, 0);
+            }
+            solution = solver.generate(empty);
+        }
 
         @Test
         @DisplayName("Generated solution only contains numbers 1-9")
