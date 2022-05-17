@@ -1,7 +1,10 @@
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
-import java.util.Stack;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Used to generate solutions to Sudoku puzzles, which are 9x9 grids that also contains nine 3x3
@@ -52,25 +55,18 @@ public class SudokuSolver implements Solver {
      */
     @Override
     public int[][] generate(int[][] board) throws IllegalArgumentException {
-        if (board == null) {
-            throw new IllegalArgumentException("Cannot generate solution for a null board");
-        }
+        validateBoard(board);
 
-        if (board.length != BOARD_SIZE) {
-            throw new IllegalArgumentException("Board must have 9 rows");
-        }
+        int[][] solution = copyBoard(board);
+        // try numbers in random order so that generated solutions will be different
+        // that way a solver it can be used to generate new sudoku boards
+        List<Integer> numbers = random.ints(MIN_VALUE, MAX_VALUE + 1)
+                .distinct()
+                .limit(MAX_VALUE)
+                .boxed()
+                .collect(Collectors.toList());
 
-        for (int[] row : board) {
-            if (row.length != BOARD_SIZE) {
-                throw new IllegalArgumentException("Board must have 9 columns");
-            }
-        }
-
-        int[][] solution = Arrays.stream(board)
-                .map(int[]::clone)
-                .toArray(int[][]::new);
-
-        if (solve(solution)) return solution;
+        if (solve(solution, numbers)) return solution;
 
         throw new IllegalArgumentException("There is no solution for the given board");
     }
@@ -86,22 +82,15 @@ public class SudokuSolver implements Solver {
      * @param board the Sudoku board to try to solve
      * @return whether the board was solved or not
      */
-    private boolean solve(int[][] board) {
+    private boolean solve(int[][] board, Iterable<Integer> numbers) {
         for (int row = BOARD_START_INDEX; row < BOARD_SIZE; row++) {
             for (int column = BOARD_START_INDEX; column < BOARD_SIZE; column++) {
                 if (board[row][column] == EMPTY) {
-                    // try numbers in random order so that generated solutions will be different
-                    // that way a solver it can be used to generate new sudoku boards
-                    Stack<Integer> nums = random.ints(MIN_VALUE, MAX_VALUE + 1)
-                            .distinct()
-                            .limit(MAX_VALUE)
-                            .boxed()
-                            .collect(Collectors.toCollection(Stack::new));
 
-                    while (nums.size() > 0) {
-                        board[row][column] = nums.pop();
+                    for (int number : numbers) {
+                        board[row][column] = number;
 
-                        if (isValid(board, row, column) && solve(board)) return true;
+                        if (isValid(board, row, column) && solve(board, numbers)) return true;
 
                         board[row][column] = EMPTY;
                     }
@@ -175,8 +164,8 @@ public class SudokuSolver implements Solver {
         dividing by the block size (floor division) gives the index of a block
         multiplying by the block size gives the real index the block starts at
         e.g.:
-            0, 1, 2 divided by 3 is 0 -> 0 times 3 gives the starting index 0
-            3, 4, 5 divided by 3 is 1 -> 1 times 3 gives the starting index 3
+            indexes 0, 1, 2 divided by 3 is 0 -> 0 times 3 gives the starting index 0
+            indexes 3, 4, 5 divided by 3 is 1 -> 1 times 3 gives the starting index 3
             etc.
          */
         int blockRowStart = (row / BLOCK_SIZE) * BLOCK_SIZE;
@@ -231,7 +220,26 @@ public class SudokuSolver implements Solver {
     }
 
     @Override
-    public boolean isUnique(int[][] board) {
+    public boolean isUnique(int[][] board) throws IllegalArgumentException {
+        validateBoard(board);
+
+        int[][] ascendingSolution = copyBoard(board);
+        int[][] descendingSolution = copyBoard(board);
+        List<Integer> ascendingNumbers = IntStream.range(MIN_VALUE, MAX_VALUE + 1)
+                .boxed()
+                .collect(Collectors.toList());
+        List<Integer> descendingNumbers = new ArrayList<>(ascendingNumbers);
+        Collections.reverse(descendingNumbers);
+
+        if (solve(ascendingSolution, ascendingNumbers)
+                && solve(descendingSolution, descendingNumbers)) {
+            return Arrays.deepEquals(ascendingSolution, descendingSolution);
+        }
+
+        throw new IllegalArgumentException("There is no solution for the given board");
+    }
+
+    private void validateBoard(int[][] board) throws IllegalArgumentException {
         if (board == null) {
             throw new IllegalArgumentException("Cannot generate solution for a null board");
         }
@@ -245,57 +253,11 @@ public class SudokuSolver implements Solver {
                 throw new IllegalArgumentException("Board must have 9 columns");
             }
         }
-
-        int[][] ascendingSolution = Arrays.stream(board)
-                .map(int[]::clone)
-                .toArray(int[][]::new);
-        int[][] descendingSolution = Arrays.stream(board)
-                .map(int[]::clone)
-                .toArray(int[][]::new);
-
-        if (solveAscending(ascendingSolution) && solveDescending(descendingSolution)) {
-            return Arrays.deepEquals(ascendingSolution, descendingSolution);
-        }
-
-        throw new IllegalArgumentException("There is no solution for the given board");
     }
 
-    // TODO: refactor solve to take an iterable as parameter
-    //  can pass an iterable with numbers in random/ascending/descending order and use in loop
-    //  to check valid values for a tile
-    private boolean solveAscending(int[][] board) {
-        for (int row = BOARD_START_INDEX; row < BOARD_SIZE; row++) {
-            for (int column = BOARD_START_INDEX; column < BOARD_SIZE; column++) {
-                if (board[row][column] == EMPTY) {
-                    for (int number = MIN_VALUE; number <= MAX_VALUE; number++) {
-                        board[row][column] = number;
-
-                        if (isValid(board, row, column) && solveAscending(board)) return true;
-
-                        board[row][column] = EMPTY;
-                    }
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    private boolean solveDescending(int[][] board) {
-        for (int row = BOARD_START_INDEX; row < BOARD_SIZE; row++) {
-            for (int column = BOARD_START_INDEX; column < BOARD_SIZE; column++) {
-                if (board[row][column] == EMPTY) {
-                    for (int number = MAX_VALUE; number >= MIN_VALUE; number--) {
-                        board[row][column] = number;
-
-                        if (isValid(board, row, column) && solveDescending(board)) return true;
-
-                        board[row][column] = EMPTY;
-                    }
-                    return false;
-                }
-            }
-        }
-        return true;
+    private int[][] copyBoard(int[][] board) {
+        return Arrays.stream(board)
+                .map(int[]::clone)
+                .toArray(int[][]::new);
     }
 }
