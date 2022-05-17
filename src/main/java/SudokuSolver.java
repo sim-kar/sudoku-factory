@@ -1,12 +1,16 @@
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
-import java.util.stream.IntStream;
+import java.util.Stack;
+import java.util.stream.Collectors;
 
 public class SudokuSolver implements Solver {
+    private final static int BOARD_START_INDEX = 0;
+    private final static int BOARD_SIZE = 9;
+    private final static int BLOCK_SIZE = 3;
+    private final static int MAX_VALUE = 9;
+    private final static int MIN_VALUE = 1;
+    private final static int EMPTY = 0;
     private final Random random;
-    private int[][] solution;
 
     public SudokuSolver(Random random) {
         this.random = random;
@@ -18,91 +22,105 @@ public class SudokuSolver implements Solver {
             throw new IllegalArgumentException("Cannot generate solution for a null board");
         }
 
-        int[][] newBoard = Arrays.stream(board).map(int[]::clone).toArray(int[][]::new);
+        int[][] solution = Arrays.stream(board)
+                .map(int[]::clone)
+                .toArray(int[][]::new);
 
-        if (solve(newBoard)) {
-            return this.solution;
-        }
+        if (solve(solution)) return solution;
 
         throw new IllegalArgumentException("There is no solution for the given board");
     }
 
     private boolean solve(int[][] board) {
-        for (int row = 0; row < 9; row++) {
-            for (int column = 0; column < 9; column++) {
-                if (board[row][column] == 0) {
-                    List<Integer> numbers = new ArrayList<>(
-                            Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9)
-                    );
-                    while (numbers.size() > 0) {
-                        int index = random.nextInt(numbers.size());
-                        int number = numbers.get(index);
-                        numbers.remove(index);
-                        board[row][column] = number;
+        for (int row = BOARD_START_INDEX; row < BOARD_SIZE; row++) {
+            for (int column = BOARD_START_INDEX; column < BOARD_SIZE; column++) {
+                if (board[row][column] == EMPTY) {
+                    // try numbers in random order so that generated solutions will be different
+                    // that way a solver it can be used to generate new sudoku boards
+                    Stack<Integer> nums = random.ints(MIN_VALUE, MAX_VALUE + 1)
+                            .distinct()
+                            .limit(MAX_VALUE)
+                            .boxed()
+                            .collect(Collectors.toCollection(Stack::new));
 
-                        if (isValid(board, row, column) && solve(board)) {
-                            this.solution = board;
-                            return true;
-                        }
+                    while (nums.size() > 0) {
+                        board[row][column] = nums.pop();
 
-                        board[row][column] = 0;
+                        if (isValid(board, row, column) && solve(board)) return true;
+
+                        board[row][column] = EMPTY;
                     }
-
                     return false;
                 }
             }
         }
-
-        this.solution = board;
         return true;
     }
 
     private boolean isValid(int[][] board, int row, int column) {
-        return (rowConstraint(board, row)
-                && columnConstraint(board, column)
-                && blockConstraint(board, row, column));
+        return (isRowValid(board, row)
+                && isColumnValid(board, column)
+                && isBlockValid(board, row, column));
     }
 
-    private boolean rowConstraint(int[][] board, int row) {
-        boolean[] constraint = new boolean[9];
-        return IntStream.range(0, 9)
-                .allMatch(column -> checkConstraint(board, row, constraint, column));
+    private boolean isRowValid(int[][] board, int row) {
+        boolean[] takenNumbers = new boolean[BOARD_SIZE];
+
+        for (int column = BOARD_START_INDEX; column < BOARD_SIZE; column++) {
+            if (!isTileValid(board, row, column, takenNumbers)) return false;
+        }
+        return true;
     }
 
-    private boolean columnConstraint(int[][] board, int column) {
-        boolean[] constraint = new boolean[9];
-        return IntStream.range(0, 9)
-                .allMatch(row -> checkConstraint(board, row, constraint, column));
+    private boolean isColumnValid(int[][] board, int column) {
+        boolean[] takenNumbers = new boolean[BOARD_SIZE];
+
+        for (int row = BOARD_START_INDEX; row < BOARD_SIZE; row++) {
+
+            if (!isTileValid(board, row, column, takenNumbers)) return false;
+        }
+        return true;
     }
 
-    private boolean blockConstraint(int[][] board, int row, int column) {
-        boolean[] constraint = new boolean[9];
-        int blockRowStart = (row / 3) * 3;
-        int blockRowEnd = blockRowStart + 3;
+    private boolean isBlockValid(int[][] board, int row, int column) {
+        boolean[] takenNumbers = new boolean[BOARD_SIZE];
+        /*
+        dividing by the block size (floor division) gives the index of a block
+        multiplying by the block size gives the real index the block starts at
+        e.g.:
+            0, 1, 2 divided by 3 is 0 -> 0 times 3 gives the starting index 0
+            3, 4, 5 divided by 3 is 1 -> 1 times 3 gives the starting index 3
+            etc.
+         */
+        int blockRowStart = (row / BLOCK_SIZE) * BLOCK_SIZE;
+        int blockRowEnd = blockRowStart + BLOCK_SIZE;
+        int blockColumnStart = (column / BLOCK_SIZE) * BLOCK_SIZE;
+        int blockColumnEnd = blockColumnStart + BLOCK_SIZE;
 
-        int blockColumnStart = (column / 3) * 3;
-        int blockColumnEnd = blockColumnStart + 3;
-
-        for (int r = blockRowStart; r < blockRowEnd; r++) {
-            for (int c = blockColumnStart; c < blockColumnEnd; c++) {
-                if (!checkConstraint(board, r, constraint, c)) return false;
+        for (int blockRow = blockRowStart; blockRow < blockRowEnd; blockRow++) {
+            for (int blockColumn = blockColumnStart; blockColumn < blockColumnEnd; blockColumn++) {
+                if (!isTileValid(board, blockRow, blockColumn, takenNumbers)) return false;
             }
         }
         return true;
     }
 
-    boolean checkConstraint(
+    private boolean isTileValid(
             int[][] board,
             int row,
-            boolean[] constraint,
-            int column
-    ) {
-        if ((board[row][column] > 9) || (board[row][column] < 0)) {
-            throw new IllegalArgumentException("Boards can only contain numbers 1-9");
+            int column,
+            boolean[] takenNumbers
+    ) throws IllegalArgumentException {
+        if ((board[row][column] > MAX_VALUE) || (board[row][column] < EMPTY)) {
+            throw new IllegalArgumentException("Boards can only contain numbers 0-9");
         }
-        if (board[row][column] != 0) {
-            if (!constraint[board[row][column] - 1]) {
-                constraint[board[row][column] - 1] = true;
+
+        if (board[row][column] != EMPTY) {
+            // the number acts as index to takenNumbers, but needs to be converted from 1-9 to 0-8
+            int index = board[row][column] - 1;
+
+            if (!takenNumbers[index]) {
+                takenNumbers[index] = true;
             } else {
                 return false;
             }
