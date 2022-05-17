@@ -279,6 +279,138 @@ class SudokuSolverTest {
     @Nested
     @DisplayName("Checking if a Sudoku board is unique")
     class BoardIsUniqueTest {
+        Solver solver;
+        int[][] board;
 
+        @BeforeEach
+        void setup() {
+            Random random = new Random(0L);
+            solver = new SudokuSolver(random);
+            board = new int[9][9];
+            for (int[] row : board) {
+                Arrays.fill(row, 0);
+            }
+        }
+
+        @Test
+        @DisplayName("Checking if a board is unique with null input throws an error")
+        void nullBoardThrowsError() {
+            assertThrows(IllegalArgumentException.class, () -> solver.isUnique(null));
+        }
+
+        @Test
+        @DisplayName("Checking if a board with numbers >9 is unique throws error")
+        void boardWithNumbersGreaterThanNineThrowsError() {
+            board[0][0] = 10;
+            assertThrows(IllegalArgumentException.class, () -> solver.isUnique(board));
+        }
+
+        @Test
+        @DisplayName("Checking if a board with numbers <0 is unique throws error")
+        void boardWithNumbersLessThanZeroThrowsError() {
+            board[0][0] = -1;
+            assertThrows(IllegalArgumentException.class, () -> solver.isUnique(board));
+        }
+
+        @Test
+        @DisplayName("Checking if a board with duplicates in row is unique throws error")
+        void boardWithDuplicatesInRowThrowsError() {
+            board[0][0] = 1;
+            board[0][1] = 1;
+            assertThrows(IllegalArgumentException.class, () -> solver.isUnique(board));
+        }
+
+        @Test
+        @DisplayName("Checking if a board with duplicates in column is unique throws error")
+        void boardWithDuplicatesInColumnThrowsError() {
+            board[0][0] = 1;
+            board[1][0] = 1;
+            assertThrows(IllegalArgumentException.class, () -> solver.isUnique(board));
+        }
+
+
+        @Test
+        @DisplayName("Checking if a board with duplicates in block is unique throws error")
+        void boardWithDuplicatesInBlockThrowsError() {
+            board[0][0] = 1;
+            board[1][1] = 1;
+            assertThrows(IllegalArgumentException.class, () -> solver.isUnique(board));
+        }
+
+
+        @Test
+        @DisplayName("Checking if a board with wrong column size is unique throws error")
+        void boardWithWrongColumnSizeThrowsError() {
+            board = new int[9][8];
+            assertThrows(IllegalArgumentException.class, () -> solver.isUnique(board));
+        }
+
+        @Test
+        @DisplayName("Checking if a board with wrong row size is unique throws error")
+        void boardWithWrongRowSizeThrowsError() {
+            board = new int[10][9];
+            assertThrows(IllegalArgumentException.class, () -> solver.isUnique(board));
+        }
+
+        // FIXME: should a board with no solution throw exception or return false?
+        //  When generating a new Sudoku puzzle, removing a single tile from a filled in
+        //  board and testing if it is unique should (hopefully) not result in an unsolvable puzzle,
+        //  only a puzzle with multiple solutions. Therefore, throwing an exception seems apt
+        @Test
+        @DisplayName("Checking if a board with no possible solution is unique throws error")
+        void boardWithNoSolutionReturnsFalse() {
+            // board is taken from https://sudokudragon.com/unsolvable.htm
+            board = new int[][]{
+                    {5, 1, 6, 8, 4, 9, 7, 3, 2},
+                    {3, 0, 7, 6, 0, 5, 0, 0, 0},
+                    {8, 0, 9, 7, 0, 0, 0, 6, 5},
+                    {1, 3, 5, 0, 6, 0, 9, 0, 7},
+                    {4, 7, 2, 5, 9, 1, 0, 0, 6},
+                    {9, 6, 8, 3, 7, 0, 0, 5, 0},
+                    {2, 5, 3, 1, 8, 6, 0, 7, 4},
+                    {6, 8, 4, 2, 0, 7, 5, 0, 0},
+                    {7, 9, 1, 0, 5, 0, 6, 0, 8}
+            };
+
+            assertThrows(IllegalArgumentException.class, () -> solver.isUnique(board));
+        }
+
+        @Test
+        @DisplayName("Checking if a board with one solution is unique returns true")
+        void boardWithOneSolutionReturnsTrue() {
+            // board taken from https://en.wikipedia.org/wiki/Sudoku
+            board = new int[][]{
+                    {5, 3, 0, 0, 7, 0, 0, 0, 0},
+                    {6, 0, 0, 1, 9, 5, 0, 0, 0},
+                    {0, 9, 8, 0, 0, 0, 0, 6, 0},
+                    {8, 0, 0, 0, 6, 0, 0, 0, 3},
+                    {4, 0, 0, 8, 0, 3, 0, 0, 1},
+                    {7, 0, 0, 0, 2, 0, 0, 0, 6},
+                    {0, 6, 0, 0, 0, 0, 2, 8, 0},
+                    {0, 0, 0, 4, 1, 9, 0, 0, 5},
+                    {0, 0, 0, 0, 8, 0, 0, 7, 9}
+            };
+
+            assertTrue(solver.isUnique(board));
+        }
+
+        @Test
+        @DisplayName("Checking if a board with multiple solution is unique returns false")
+        void boardWithMultipleSolutionReturnsFalse() {
+            // board is taken from https://sudokudragon.com/unsolvable.htm
+            board = new int[][]{
+                    {0, 8, 0, 0, 0, 9, 7, 4, 3},
+                    {0, 5, 0, 0, 0, 8, 0, 1, 0},
+                    {0, 1, 0, 0, 0, 0, 0, 0, 0},
+                    {8, 0, 0, 0, 0, 5, 0, 0, 0},
+                    {0, 0, 0, 8, 0, 4, 0, 0, 0},
+                    {0, 0, 0, 3, 0, 0, 0, 0, 6},
+                    {0, 0, 0, 0, 0, 0, 0, 7, 0},
+                    {0, 3, 0, 5, 0, 0, 0, 8, 0},
+                    {9, 7, 2, 4, 0, 0, 0, 5, 0},
+            };
+
+            assertFalse(solver.isUnique(board));
+        }
     }
 }
