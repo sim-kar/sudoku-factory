@@ -73,16 +73,16 @@ class SudokuSolverTest {
         }
 
         @Test
-        @DisplayName("Generating a solution from board that is too small throws error")
+        @DisplayName("Generating a solution from board with wrong column size throws error")
         void tooSmallInputToGenerateSolutionThrowsError() {
             empty = new int[9][8];
             assertThrows(IllegalArgumentException.class, () -> solver.generate(empty));
         }
 
         @Test
-        @DisplayName("Generating a solution from board that is too large throws error")
+        @DisplayName("Generating a solution from board with wrong row size throws error")
         void tooLargeInputToGenerateSolutionThrowsError() {
-            empty = new int[10][10];
+            empty = new int[10][9];
             assertThrows(IllegalArgumentException.class, () -> solver.generate(empty));
         }
 
