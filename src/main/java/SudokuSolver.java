@@ -56,6 +56,16 @@ public class SudokuSolver implements Solver {
             throw new IllegalArgumentException("Cannot generate solution for a null board");
         }
 
+        if (board.length != BOARD_SIZE) {
+            throw new IllegalArgumentException("Board must have 9 rows");
+        }
+
+        for (int[] row : board) {
+            if (row.length != BOARD_SIZE) {
+                throw new IllegalArgumentException("Board must have 9 columns");
+            }
+        }
+
         int[][] solution = Arrays.stream(board)
                 .map(int[]::clone)
                 .toArray(int[][]::new);
