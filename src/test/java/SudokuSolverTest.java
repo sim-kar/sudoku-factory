@@ -272,30 +272,4 @@ class SudokuSolverTest {
 
         assertNotEquals(solution2, solution);
     }
-
-    @Test
-    @DisplayName("Solve a 17 hint Sudoku puzzle")
-    void solveDifficultSudoku() {
-        int[][] puzzle = new int[][]{
-                {0, 0, 0, 0, 0, 0, 0, 8, 1},
-                {0, 3, 0, 0, 2, 0, 0, 0, 0},
-                {0, 0, 0, 7, 0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 5, 0, 6, 2, 0},
-                {4, 0, 0, 0, 9, 0, 0, 0, 0},
-                {1, 0, 0, 0, 0, 0, 0, 0, 0},
-                {0, 6, 0, 4, 0, 0, 3, 0, 0},
-                {5, 0, 0, 0, 0, 8, 0, 0, 0},
-                {0, 0, 0, 1, 0, 0, 0, 0, 0}
-        };
-        int[][] solution = solver.generate(puzzle);
-
-        for (int[] row : solution) {
-            for (int column : row) {
-                System.out.print(column + " ");
-            }
-            System.out.println();
-        }
-
-        assertNotEquals(puzzle, solution);
-    }
 }
