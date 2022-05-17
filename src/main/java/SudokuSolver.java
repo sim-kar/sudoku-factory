@@ -232,6 +232,70 @@ public class SudokuSolver implements Solver {
 
     @Override
     public boolean isUnique(int[][] board) {
-        return false;
+        if (board == null) {
+            throw new IllegalArgumentException("Cannot generate solution for a null board");
+        }
+
+        if (board.length != BOARD_SIZE) {
+            throw new IllegalArgumentException("Board must have 9 rows");
+        }
+
+        for (int[] row : board) {
+            if (row.length != BOARD_SIZE) {
+                throw new IllegalArgumentException("Board must have 9 columns");
+            }
+        }
+
+        int[][] ascendingSolution = Arrays.stream(board)
+                .map(int[]::clone)
+                .toArray(int[][]::new);
+        int[][] descendingSolution = Arrays.stream(board)
+                .map(int[]::clone)
+                .toArray(int[][]::new);
+
+        if (solveAscending(ascendingSolution) && solveDescending(descendingSolution)) {
+            return Arrays.deepEquals(ascendingSolution, descendingSolution);
+        }
+
+        throw new IllegalArgumentException("There is no solution for the given board");
+    }
+
+    // TODO: refactor solve to take an iterable as parameter
+    //  can pass an iterable with numbers in random/ascending/descending order and use in loop
+    //  to check valid values for a tile
+    private boolean solveAscending(int[][] board) {
+        for (int row = BOARD_START_INDEX; row < BOARD_SIZE; row++) {
+            for (int column = BOARD_START_INDEX; column < BOARD_SIZE; column++) {
+                if (board[row][column] == EMPTY) {
+                    for (int number = MIN_VALUE; number <= MAX_VALUE; number++) {
+                        board[row][column] = number;
+
+                        if (isValid(board, row, column) && solveAscending(board)) return true;
+
+                        board[row][column] = EMPTY;
+                    }
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private boolean solveDescending(int[][] board) {
+        for (int row = BOARD_START_INDEX; row < BOARD_SIZE; row++) {
+            for (int column = BOARD_START_INDEX; column < BOARD_SIZE; column++) {
+                if (board[row][column] == EMPTY) {
+                    for (int number = MAX_VALUE; number >= MIN_VALUE; number--) {
+                        board[row][column] = number;
+
+                        if (isValid(board, row, column) && solveDescending(board)) return true;
+
+                        board[row][column] = EMPTY;
+                    }
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }
