@@ -101,7 +101,19 @@ class SudokuBoardTest {
     }
 
     @Test
-    void isCorrect() {
+    @DisplayName("Check if all Tiles have the correct value")
+    void checkAllTilesReturnTrue() {
+        Assertions.assertTrue(board.isCorrect());
+    }
+
+    @Test
+    @DisplayName("Check if all Tiles have the correct value")
+    void checkAllTilesReturnFalse() {
+        Position position = new Position(2,4);
+        board.getTile(position).setEditable(true);
+        board.setTile(position,7);
+
+        Assertions.assertFalse(board.isCorrect());
     }
 
     @Test
