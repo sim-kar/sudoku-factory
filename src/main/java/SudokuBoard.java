@@ -27,7 +27,7 @@ public class SudokuBoard implements Board{
 
     @Override
     public Section getRow(Position xy) {
-        return null;
+        return this.rows.get(xy);
     }
 
     @Override
