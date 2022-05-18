@@ -352,10 +352,6 @@ class SudokuSolverTest {
             assertThrows(IllegalArgumentException.class, () -> solver.isUnique(board));
         }
 
-        // FIXME: should a board with no solution throw exception or return false?
-        //  When generating a new Sudoku puzzle, removing a single tile from a filled in
-        //  board and testing if it is unique should (hopefully) not result in an unsolvable puzzle,
-        //  only a puzzle with multiple solutions. Therefore, throwing an exception seems apt
         @Test
         @DisplayName("Checking if a board with no possible solution is unique throws error")
         void boardWithNoSolutionReturnsFalse() {
