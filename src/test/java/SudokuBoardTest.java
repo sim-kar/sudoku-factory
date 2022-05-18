@@ -82,7 +82,11 @@ class SudokuBoardTest {
     }
 
     @Test
-    void getTile() {
+    @DisplayName("Get the Tile at a certain Position")
+    void boardReturnsCorrectTile() {
+        Position position = new Position(3,3);
+        Tile tile = new SudokuTile(3, position);
+        Assertions.assertEquals(tile, board.getTile(position));
     }
 
     @Test
