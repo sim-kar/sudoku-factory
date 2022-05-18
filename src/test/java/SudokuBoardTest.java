@@ -30,16 +30,24 @@ class SudokuBoardTest {
     }
 
     @Test
-    void testGetRow() {
+    @DisplayName("Create a board with a column and get the section for the column")
+    void createBoardReturnsColumnSection() {
+
+        Set<Tile> tiles = new HashSet<>();
+        tiles.add(new SudokuTile(3,new Position(0,2)));
+        tiles.add(new SudokuTile(1,new Position(4,2)));
+        tiles.add(new SudokuTile(7,new Position(7,2)));
+
+        SudokuSection section_col2 = new SudokuSection(tiles);
+        SudokuSection[] columns;
+        columns = new SudokuSection[1];
+        columns[0] = section_col2;
+        SudokuBoard board = new SudokuBoard(null, columns, null);
+
+        Assertions.assertEquals(section_col2, board.getColumn(2));
+        Assertions.assertEquals(section_col2, board.getColumn(new Position(0,2)));
     }
 
-    @Test
-    void getColumn() {
-    }
-
-    @Test
-    void testGetColumn() {
-    }
 
     @Test
     void getBlock() {
