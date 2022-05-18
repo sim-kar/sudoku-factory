@@ -1,7 +1,4 @@
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -12,7 +9,7 @@ class SudokuBoardTest {
     SudokuSection[] rows = new SudokuSection[1];
     SudokuSection[] columns = new SudokuSection[1];
     SudokuSection[] blocks = new SudokuSection[1];
-    SudokuSection section_row2, section_col2;
+    SudokuSection section_row2, section_col2, section_block5;
     SudokuBoard board;
 
     @BeforeEach
@@ -41,7 +38,14 @@ class SudokuBoardTest {
         columns[0] = section_col2;
 
         // Initialize a block
+        tiles = new HashSet<>();
+        tiles.add(new SudokuTile(3,new Position(3,3)));
+        tiles.add(new SudokuTile(1,new Position(4,4)));
+        tiles.add(new SudokuTile(7,new Position(5,5)));
 
+        section_block5 = new SudokuSection(tiles);
+        blocks = new SudokuSection[1];
+        blocks[0] = section_block5;
 
 
         board = new SudokuBoard(rows, columns, blocks);
@@ -63,7 +67,9 @@ class SudokuBoardTest {
 
 
     @Test
-    void getBlock() {
+    @DisplayName("Create a board with a block and get the section for the block")
+    void createBoardReturnsBlockSection() {
+        Assertions.assertEquals(section_block5, board.getBlock(new Position(4,4)));
     }
 
     @Test
