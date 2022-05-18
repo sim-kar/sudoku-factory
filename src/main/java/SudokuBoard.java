@@ -113,5 +113,8 @@ public class SudokuBoard implements Board{
 
     @Override
     public void clear() {
+        rows.forEach((position, section) -> {
+            section.getTile(position).clear();
+        });
     }
 }
