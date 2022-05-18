@@ -11,6 +11,7 @@ class SudokuBoardTest {
     SudokuSection[] blocks = new SudokuSection[1];
     SudokuSection sectionRow, sectionColumn, sectionBlock;
     SudokuBoard board;
+    SudokuTile tile;
 
     @BeforeEach
     @DisplayName("Initialize variables for testing and create a SudokuBoard")
@@ -19,7 +20,8 @@ class SudokuBoardTest {
 
         //Initialize a row
         tiles = new HashSet<>();
-        tiles.add(new SudokuTile(3,new Position(2,4)));
+        tile = new SudokuTile(3, new Position(2,4));
+        tiles.add(tile);
         tiles.add(new SudokuTile(1,new Position(2,0)));
         tiles.add(new SudokuTile(7,new Position(2,8)));
 
@@ -84,8 +86,7 @@ class SudokuBoardTest {
     @Test
     @DisplayName("Get the Tile at a certain Position")
     void boardReturnsCorrectTile() {
-        Position position = new Position(3,3);
-        Tile tile = new SudokuTile(3, position);
+        Position position = new Position(2,4);
         Assertions.assertEquals(tile, board.getTile(position));
     }
 
