@@ -91,7 +91,13 @@ class SudokuBoardTest {
     }
 
     @Test
-    void setTile() {
+    @DisplayName("Set the value of a Tile at a certain Position")
+    void setValueOfTileReturnCorrectValue() {
+        Position position = new Position(2,4);
+        board.getTile(position).setEditable(true);
+        board.setTile(position,7);
+
+        Assertions.assertEquals(7, board.getTile(position).getCurrentValue());
     }
 
     @Test
