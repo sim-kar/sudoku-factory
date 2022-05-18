@@ -117,7 +117,22 @@ class SudokuBoardTest {
     }
 
     @Test
-    void getIncorrectSections() {
+    @DisplayName("Get a list of Sections containing faulty Tiles")
+    void getIncorrectSectionsReturnsList() {
+        Position position = new Position(2,4);
+        board.getTile(position).setEditable(true);
+        board.setTile(position,7);
+
+        assertAll(
+                () -> assertEquals(1, board.getIncorrectSections().size()),
+                () -> assertEquals(sectionRow, board.getIncorrectSections().get(0))
+        );
+    }
+
+    @Test
+    @DisplayName("Get a list of Sections containing faulty Tiles")
+    void getIncorrectSectionsReturnsEmptyList() {
+        Assertions.assertEquals(0, board.getIncorrectSections().size());
     }
 
     @Test
