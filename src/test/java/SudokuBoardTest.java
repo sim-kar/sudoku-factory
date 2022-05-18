@@ -10,14 +10,11 @@ class SudokuBoardTest {
 
     @Test
     void getRow() {
-        Tile tile1 = new SudokuTile(3,new Position(2,4));
-        Tile tile2 = new SudokuTile(1,new Position(2,1));
-        Tile tile3 = new SudokuTile(7,new Position(2,8));
 
         Set<Tile> tiles = new HashSet<>();
-        tiles.add(tile1);
-        tiles.add(tile2);
-        tiles.add(tile3);
+        tiles.add(new SudokuTile(3,new Position(2,4)));
+        tiles.add(new SudokuTile(1,new Position(2,0)));
+        tiles.add(new SudokuTile(7,new Position(2,8)));
 
         SudokuSection section_row2 = new SudokuSection(tiles);
         SudokuSection[] rows;
@@ -25,7 +22,7 @@ class SudokuBoardTest {
         rows[0] = section_row2;
         SudokuBoard board = new SudokuBoard(rows, null, null);
 
-        SudokuSection returnedSection = board.getRow(2);
+        Section returnedSection = board.getRow(2);
         Assertions.assertEquals(section_row2, returnedSection);
 
     }
