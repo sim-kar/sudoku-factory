@@ -136,6 +136,12 @@ class SudokuBoardTest {
     }
 
     @Test
-    void clear() {
+    @DisplayName("Clears and sets every Tile's value to empty")
+    void clearAllEditableTilesReturnsTrue() {
+        Position position = new Position(2,4);
+        board.getTile(position).setEditable(true);
+        board.clear();
+        Assertions.assertNotEquals(3, board.getTile(position).getCurrentValue());
+
     }
 }
