@@ -65,7 +65,6 @@ class SudokuBoardTest {
         Assertions.assertEquals(section_col2, board.getColumn(new Position(0,2)));
     }
 
-
     @Test
     @DisplayName("Create a board with a block and get the section for the block")
     void createBoardReturnsBlockSection() {

@@ -30,6 +30,16 @@ public class SudokuBoard implements Board{
             });
         }
 
+        // Populate the blocks Map
+        for (int i = 0; i < blocks.length; i++) {
+            Set<Tile> tiles = blocks[i].getTiles();
+            int finalI = i;
+            tiles.forEach(tile -> {
+                Position position = tile.getPosition();
+                this.blocks.put(position, blocks[finalI]);
+            });
+        }
+
     }
 
     @Override
@@ -54,7 +64,7 @@ public class SudokuBoard implements Board{
 
     @Override
     public Section getBlock(Position xy) {
-        return null;
+        return this.blocks.get(xy);
     }
 
     @Override
