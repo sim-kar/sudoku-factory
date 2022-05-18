@@ -13,7 +13,7 @@ class SudokuBoardTest {
     SudokuBoard board;
 
     @BeforeEach
-    @DisplayName("Initialize variables for testing")
+    @DisplayName("Initialize variables for testing and create a SudokuBoard")
     void initVars() {
         Set<Tile> tiles;
 
@@ -52,21 +52,31 @@ class SudokuBoardTest {
     }
 
     @Test
-    @DisplayName("Create a board with a row and get the section for the row")
-    void createBoardReturnsRowSection() {
+    @DisplayName("Get the row-section for a certain row number")
+    void boardReturnsRowSectionFromRowNumber() {
         Assertions.assertEquals(sectionRow, board.getRow(2));
+    }
+
+    @Test
+    @DisplayName("Get the row-section containing a certain Position")
+    void boardReturnsRowSectionFromPosition() {
         Assertions.assertEquals(sectionRow, board.getRow(new Position(2,0)));
     }
 
     @Test
-    @DisplayName("Create a board with a column and get the section for the column")
-    void createBoardReturnsColumnSection() {
+    @DisplayName("Get the column-section for a certain column number")
+    void boardReturnsColumnSectionFromRowNumber() {
         Assertions.assertEquals(sectionColumn, board.getColumn(2));
+    }
+
+    @Test
+    @DisplayName("Get the column-section containing a certain Position")
+    void boardReturnsColumnSectionFromPosition() {
         Assertions.assertEquals(sectionColumn, board.getColumn(new Position(0,2)));
     }
 
     @Test
-    @DisplayName("Create a board with a block and get the section for the block")
+    @DisplayName("Get the block-section for a certain Position")
     void createBoardReturnsBlockSection() {
         Assertions.assertEquals(sectionBlock, board.getBlock(new Position(4,4)));
     }
