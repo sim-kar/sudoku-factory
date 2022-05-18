@@ -1,7 +1,4 @@
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class SudokuBoard implements Board{
     Map<Position, Section> rows = new HashMap<>();
@@ -89,12 +86,29 @@ public class SudokuBoard implements Board{
 
     @Override
     public boolean isCorrect() {
-        return false;
+
+        for (Section section : rows.values()) {
+            for (Tile tile : section.getTiles()) {
+                if (!tile.check()) return false;
+            }
+        }
+
+        return true;
     }
 
     @Override
     public List<Section> getIncorrectSections() {
-        return null;
+        List<Section> incorrectSections = new LinkedList<>();
+
+        for (Section section : rows.values()) {
+            for (Tile tile : section.getTiles()) {
+                if (!tile.check()) {
+                    if (!incorrectSections.contains(section))
+                        incorrectSections.add(section);
+                }
+            }
+        }
+        return incorrectSections;
     }
 
     @Override
