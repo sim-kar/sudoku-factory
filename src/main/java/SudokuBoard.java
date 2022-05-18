@@ -10,6 +10,7 @@ public class SudokuBoard implements Board{
 
     public SudokuBoard(Section[] rows, Section[] columns, Section[] blocks) {
 
+        // Populate the rows Map
         for (int i = 0; i < rows.length; i++) {
             Set<Tile> tiles = rows[i].getTiles();
             int finalI = i;
@@ -18,6 +19,17 @@ public class SudokuBoard implements Board{
                 this.rows.put(position, rows[finalI]);
             });
         }
+
+        // Populate the columns Map
+        for (int i = 0; i < columns.length; i++) {
+            Set<Tile> tiles = columns[i].getTiles();
+            int finalI = i;
+            tiles.forEach(tile -> {
+                Position position = tile.getPosition();
+                this.columns.put(position, columns[finalI]);
+            });
+        }
+
     }
 
     @Override
@@ -31,13 +43,13 @@ public class SudokuBoard implements Board{
     }
 
     @Override
-    public Section getColumn(int x) {
-        return null;
+    public Section getColumn(int y) {
+        return this.columns.get(new Position(0,y));
     }
 
     @Override
     public Section getColumn(Position xy) {
-        return null;
+        return this.columns.get(xy);
     }
 
     @Override
