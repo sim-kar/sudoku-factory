@@ -1,4 +1,5 @@
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
@@ -9,7 +10,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class SudokuBoardTest {
 
     @Test
-    void getRow() {
+    @DisplayName("Create a board with a row and get the section for the row")
+    void createBoardReturnsRowSection() {
 
         Set<Tile> tiles = new HashSet<>();
         tiles.add(new SudokuTile(3,new Position(2,4)));
@@ -22,8 +24,8 @@ class SudokuBoardTest {
         rows[0] = section_row2;
         SudokuBoard board = new SudokuBoard(rows, null, null);
 
-        Section returnedSection = board.getRow(2);
-        Assertions.assertEquals(section_row2, returnedSection);
+        Assertions.assertEquals(section_row2, board.getRow(2));
+        Assertions.assertEquals(section_row2, board.getRow(new Position(2,0)));
 
     }
 
