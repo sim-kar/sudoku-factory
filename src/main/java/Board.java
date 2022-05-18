@@ -1,7 +1,7 @@
 import java.util.List;
 
 /**
- * A Board represents the game board and hold references to all Sections and Tiles of the game
+ * A Board represents the game board and holds references to all Sections and Tiles of the game
  */
 public interface Board {
 
@@ -57,7 +57,7 @@ public interface Board {
      * Sets the value of the Tile at the specified position, only if the Tile is editable
      *
      * @param xy The Position of the Tile
-     * @param value The the new value of the Tile
+     * @param value The new value of the Tile
      */
     public void setTile(Position xy, int value);
 
