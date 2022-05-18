@@ -76,11 +76,15 @@ public class SudokuBoard implements Board{
 
     @Override
     public Tile getTile(Position xy) {
-        return null;
+        Section section = rows.get(xy);
+        return section.getTile(xy);
     }
 
     @Override
     public void setTile(Position xy, int value) {
+        Section section = rows.get(xy);
+        Tile tile = section.getTile(xy);
+        tile.setCurrentValue(value);
     }
 
     @Override
