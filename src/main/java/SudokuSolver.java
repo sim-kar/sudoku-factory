@@ -229,7 +229,7 @@ public class SudokuSolver implements Solver {
      * a number between 1 and 9.
      *
      * @param board the Sudoku board to check if it only has one solution
-     * @return
+     * @return whether the Sudoku board only has one solution
      * @throws IllegalArgumentException if the board is null, the wrong size, or contains a number
      *                                  outside the range 0-9
      */
