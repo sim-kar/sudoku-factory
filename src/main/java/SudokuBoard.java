@@ -47,8 +47,8 @@ public class SudokuBoard implements Board{
     }
 
     @Override
-    public Section getRow(int x) {
-        return this.rows.get(new Position(x,0));
+    public Section getRow(int y) {
+        return this.rows.get(new Position(0, y));
     }
 
     @Override
@@ -57,8 +57,8 @@ public class SudokuBoard implements Board{
     }
 
     @Override
-    public Section getColumn(int y) {
-        return this.columns.get(new Position(0,y));
+    public Section getColumn(int x) {
+        return this.columns.get(new Position(x, 0));
     }
 
     @Override
