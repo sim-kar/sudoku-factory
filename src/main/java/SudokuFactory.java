@@ -1,6 +1,8 @@
 public class SudokuFactory implements Factory {
-    public SudokuFactory(Solver solver) {
+    private final Solver solver;
 
+    public SudokuFactory(Solver solver) {
+        this.solver = solver;
     }
 
     @Override
