@@ -18,22 +18,22 @@ class SudokuBoardTest {
     void initVars() {
         Set<Tile> tiles;
 
-        //Initialize a row
+        // Initialize a row
         tiles = new HashSet<>();
-        tile = new SudokuTile(3, new Position(2,4));
+        tile = (new SudokuTile(1,new Position(4,2)));
         tiles.add(tile);
-        tiles.add(new SudokuTile(1,new Position(2,0)));
-        tiles.add(new SudokuTile(7,new Position(2,8)));
+        tiles.add(new SudokuTile(3,new Position(0,2)));
+        tiles.add(new SudokuTile(7,new Position(7,2)));
 
         sectionRow = new SudokuSection(tiles);
         rows = new SudokuSection[1];
         rows[0] = sectionRow;
 
-        // Initialize a column
+        //Initialize a column
         tiles = new HashSet<>();
-        tiles.add(new SudokuTile(3,new Position(0,2)));
-        tiles.add(new SudokuTile(1,new Position(4,2)));
-        tiles.add(new SudokuTile(7,new Position(7,2)));
+        tiles.add(new SudokuTile(3, new Position(2,4)));
+        tiles.add(new SudokuTile(1,new Position(2,0)));
+        tiles.add(new SudokuTile(7,new Position(2,8)));
 
         sectionColumn = new SudokuSection(tiles);
         columns = new SudokuSection[1];
@@ -62,7 +62,7 @@ class SudokuBoardTest {
     @Test
     @DisplayName("Get the row-section containing a certain Position")
     void boardReturnsRowSectionFromPosition() {
-        Assertions.assertEquals(sectionRow, board.getRow(new Position(2,0)));
+        Assertions.assertEquals(sectionRow, board.getRow(new Position(0,2)));
     }
 
     @Test
@@ -74,7 +74,7 @@ class SudokuBoardTest {
     @Test
     @DisplayName("Get the column-section containing a certain Position")
     void boardReturnsColumnSectionFromPosition() {
-        Assertions.assertEquals(sectionColumn, board.getColumn(new Position(0,2)));
+        Assertions.assertEquals(sectionColumn, board.getColumn(new Position(2,0)));
     }
 
     @Test
@@ -86,14 +86,14 @@ class SudokuBoardTest {
     @Test
     @DisplayName("Get the Tile at a certain Position")
     void boardReturnsCorrectTile() {
-        Position position = new Position(2,4);
+        Position position = new Position(4,2);
         Assertions.assertEquals(tile, board.getTile(position));
     }
 
     @Test
     @DisplayName("Set the value of a Tile at a certain Position")
     void setValueOfTileReturnCorrectValue() {
-        Position position = new Position(2,4);
+        Position position = new Position(4,2);
         board.getTile(position).setEditable(true);
         board.setTile(position,7);
 
@@ -109,7 +109,7 @@ class SudokuBoardTest {
     @Test
     @DisplayName("Check if all Tiles have the correct value")
     void checkAllTilesReturnFalse() {
-        Position position = new Position(2,4);
+        Position position = new Position(4,2);
         board.getTile(position).setEditable(true);
         board.setTile(position,7);
 
@@ -119,7 +119,7 @@ class SudokuBoardTest {
     @Test
     @DisplayName("Getting incorrect sections returns a list of all incorrect sections")
     void getIncorrectSectionsReturnsList() {
-        Position position = new Position(2,4);
+        Position position = new Position(4,2);
         board.getTile(position).setEditable(true);
         board.setTile(position,7);
 
@@ -218,7 +218,7 @@ class SudokuBoardTest {
     @Test
     @DisplayName("Clears and sets every Tile's value to empty")
     void clearAllEditableTilesReturnsZero() {
-        Position position = new Position(2,4);
+        Position position = new Position(4,2);
         board.getTile(position).setEditable(true);
         board.clear();
         Assertions.assertEquals(0, board.getTile(position).getCurrentValue());
