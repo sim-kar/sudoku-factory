@@ -39,16 +39,14 @@ class SudokuFactoryTest {
     @DisplayName("A board created with 40 clues has 40 clues")
     void createdBoardHasCorrectNumberOfClues() {
         Board board = factory.create(40);
-        List<Section> incorrectSections =  board.getIncorrectSections();
         int allTiles = 81;
-        int incorrectTiles = 0;
+        Set<Tile> incorrectTiles = new HashSet<>();
+        List<Section> incorrectSections = board.getIncorrectSections();
         for (Section section : incorrectSections) {
-            for (Tile tile : section.getTiles()) {
-                if (!tile.check()) incorrectTiles++;
-            }
+            incorrectTiles.addAll(section.getIncorrectTiles());
         }
 
-        assertEquals(40, allTiles - incorrectTiles);
+        assertEquals(40, allTiles - incorrectTiles.size());
     }
 
     @Test
@@ -373,15 +371,15 @@ class SudokuFactoryTest {
                     .collect(Collectors.toSet());
 
             assertAll(
-                    () -> assertTrue(Collections.max(row0) >= 9),
-                    () -> assertTrue(Collections.max(row1) >= 9),
-                    () -> assertTrue(Collections.max(row2) >= 9),
-                    () -> assertTrue(Collections.max(row3) >= 9),
-                    () -> assertTrue(Collections.max(row4) >= 9),
-                    () -> assertTrue(Collections.max(row5) >= 9),
-                    () -> assertTrue(Collections.max(row6) >= 9),
-                    () -> assertTrue(Collections.max(row7) >= 9),
-                    () -> assertTrue(Collections.max(row8) >= 9)
+                    () -> assertTrue(Collections.max(row0) <= 9),
+                    () -> assertTrue(Collections.max(row1) <= 9),
+                    () -> assertTrue(Collections.max(row2) <= 9),
+                    () -> assertTrue(Collections.max(row3) <= 9),
+                    () -> assertTrue(Collections.max(row4) <= 9),
+                    () -> assertTrue(Collections.max(row5) <= 9),
+                    () -> assertTrue(Collections.max(row6) <= 9),
+                    () -> assertTrue(Collections.max(row7) <= 9),
+                    () -> assertTrue(Collections.max(row8) <= 9)
             );
         }
 
