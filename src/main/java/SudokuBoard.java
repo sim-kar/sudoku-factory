@@ -101,13 +101,23 @@ public class SudokuBoard implements Board{
         List<Section> incorrectSections = new LinkedList<>();
 
         for (Section section : rows.values()) {
-            for (Tile tile : section.getTiles()) {
-                if (!tile.check()) {
-                    if (!incorrectSections.contains(section))
-                        incorrectSections.add(section);
-                }
-            }
+            if (!section.isCorrect())
+                if (!incorrectSections.contains(section))
+                    incorrectSections.add(section);
         }
+
+        for (Section section : columns.values()) {
+            if (!section.isCorrect())
+                if (!incorrectSections.contains(section))
+                    incorrectSections.add(section);
+        }
+
+        for (Section section : blocks.values()) {
+            if (!section.isCorrect())
+                if (!incorrectSections.contains(section))
+                    incorrectSections.add(section);
+        }
+
         return incorrectSections;
     }
 
