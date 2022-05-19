@@ -202,7 +202,9 @@ class SudokuBoardTest {
 
         assertAll(
                 () -> assertEquals(3, board.getIncorrectSections().size()),
-                () -> assertEquals(rows[0], board.getIncorrectSections().get(0))
+                () -> assertTrue(board.getIncorrectSections().contains(rows[0])),
+                () -> assertTrue(board.getIncorrectSections().contains(cols[2])),
+                () -> assertTrue(board.getIncorrectSections().contains(blocks[0]))
         );
 
     }
