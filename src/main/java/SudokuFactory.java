@@ -67,7 +67,6 @@ public class SudokuFactory implements Factory {
 
                 int x = position.getX();
                 int y = position.getY();
-                System.out.println(x + ", " + y);
                 int current = puzzle[y][x];
                 puzzle[y][x] = EMPTY;
 
@@ -93,7 +92,10 @@ public class SudokuFactory implements Factory {
             for (int x = 0; x < 9; x++) {
                 int value = solution[y][x];
                 Tile tile = new SudokuTile(value, new Position(x, y));
-                if (puzzle[y][x] == EMPTY) tile.setEditable(true);
+                if (puzzle[y][x] == EMPTY) {
+                    tile.setEditable(true);
+                    tile.clear();
+                }
 
                 tilesInRows.get(y).add(tile);
                 tilesInColumns.get(x).add(tile);
