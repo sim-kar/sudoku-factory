@@ -130,6 +130,84 @@ class SudokuBoardTest {
     }
 
     @Test
+    @DisplayName("Getting several incorrect sections returns list of all incorrect sections")
+    void getIncorrectSectionsReturnsSeveral() {
+
+        Tile tile1 = new SudokuTile(1,new Position(3,3));
+        Tile tile2 = new SudokuTile(2,new Position(3,4));
+        Tile tile3 = new SudokuTile(3,new Position(3,5));
+        Tile tile4 = new SudokuTile(4,new Position(4,3));
+        Tile tile5 = new SudokuTile(5,new Position(4,4));
+        Tile tile6 = new SudokuTile(6,new Position(4,5));
+        Tile tile7 = new SudokuTile(7,new Position(5,3));
+        Tile tile8 = new SudokuTile(8,new Position(5,4));
+        Tile tile9 = new SudokuTile(9,new Position(5,5));
+
+        Set<Tile> tilesRow1 = new HashSet<>();
+        tilesRow1.add(tile1);
+        tilesRow1.add(tile2);
+        tilesRow1.add(tile3);
+
+        Set<Tile> tilesRow2 = new HashSet<>();
+        tilesRow2.add(tile4);
+        tilesRow2.add(tile5);
+        tilesRow2.add(tile6);
+
+        Set<Tile> tilesRow3 = new HashSet<>();
+        tilesRow3.add(tile7);
+        tilesRow3.add(tile8);
+        tilesRow3.add(tile9);
+
+        Set<Tile> tilesCol1 = new HashSet<>();
+        tilesCol1.add(tile1);
+        tilesCol1.add(tile4);
+        tilesCol1.add(tile7);
+
+        Set<Tile> tilesCol2 = new HashSet<>();
+        tilesCol2.add(tile2);
+        tilesCol2.add(tile5);
+        tilesCol2.add(tile8);
+
+        Set<Tile> tilesCol3 = new HashSet<>();
+        tilesCol3.add(tile3);
+        tilesCol3.add(tile6);
+        tilesCol3.add(tile9);
+
+        Set<Tile> tilesBlock1 = new HashSet<>();
+        tilesBlock1.add(tile1);
+        tilesBlock1.add(tile2);
+        tilesBlock1.add(tile3);
+        tilesBlock1.add(tile4);
+        tilesBlock1.add(tile5);
+        tilesBlock1.add(tile6);
+        tilesBlock1.add(tile7);
+        tilesBlock1.add(tile8);
+        tilesBlock1.add(tile9);
+
+        Section[] rows = new SudokuSection[3];
+        Section[] cols = new SudokuSection[3];
+        Section[] blocks = new SudokuSection[1];
+
+        rows[0] = new SudokuSection(tilesRow1);
+        rows[1] = new SudokuSection(tilesRow2);
+        rows[2] = new SudokuSection(tilesRow3);
+        cols[0] = new SudokuSection(tilesCol1);
+        cols[1] = new SudokuSection(tilesCol2);
+        cols[2] = new SudokuSection(tilesCol3);
+        blocks[0] = new SudokuSection(tilesBlock1);
+
+        SudokuBoard board = new SudokuBoard(rows, cols, blocks);
+        tile3.setEditable(true);
+        tile3.setCurrentValue(1);
+
+        assertAll(
+                () -> assertEquals(3, board.getIncorrectSections().size()),
+                () -> assertEquals(rows[0], board.getIncorrectSections().get(0))
+        );
+
+    }
+
+    @Test
     @DisplayName("Getting incorrect sections returns empty list if there are none")
     void getIncorrectSectionsReturnsEmptyList() {
         Assertions.assertEquals(0, board.getIncorrectSections().size());
