@@ -11,6 +11,7 @@ class SudokuBoardTest {
     SudokuSection[] blocks = new SudokuSection[1];
     SudokuSection sectionRow, sectionColumn, sectionBlock;
     SudokuBoard board;
+    SudokuTile tile;
 
     @BeforeEach
     @DisplayName("Initialize variables for testing and create a SudokuBoard")
@@ -19,7 +20,8 @@ class SudokuBoardTest {
 
         //Initialize a row
         tiles = new HashSet<>();
-        tiles.add(new SudokuTile(3,new Position(2,4)));
+        tile = new SudokuTile(3, new Position(2,4));
+        tiles.add(tile);
         tiles.add(new SudokuTile(1,new Position(2,0)));
         tiles.add(new SudokuTile(7,new Position(2,8)));
 
@@ -82,22 +84,63 @@ class SudokuBoardTest {
     }
 
     @Test
-    void getTile() {
+    @DisplayName("Get the Tile at a certain Position")
+    void boardReturnsCorrectTile() {
+        Position position = new Position(2,4);
+        Assertions.assertEquals(tile, board.getTile(position));
     }
 
     @Test
-    void setTile() {
+    @DisplayName("Set the value of a Tile at a certain Position")
+    void setValueOfTileReturnCorrectValue() {
+        Position position = new Position(2,4);
+        board.getTile(position).setEditable(true);
+        board.setTile(position,7);
+
+        Assertions.assertEquals(7, board.getTile(position).getCurrentValue());
     }
 
     @Test
-    void isCorrect() {
+    @DisplayName("Check if all Tiles have the correct value")
+    void checkAllTilesReturnTrue() {
+        Assertions.assertTrue(board.isCorrect());
     }
 
     @Test
-    void getIncorrectSections() {
+    @DisplayName("Check if all Tiles have the correct value")
+    void checkAllTilesReturnFalse() {
+        Position position = new Position(2,4);
+        board.getTile(position).setEditable(true);
+        board.setTile(position,7);
+
+        Assertions.assertFalse(board.isCorrect());
     }
 
     @Test
-    void clear() {
+    @DisplayName("Get a list of Sections containing faulty Tiles")
+    void getIncorrectSectionsReturnsList() {
+        Position position = new Position(2,4);
+        board.getTile(position).setEditable(true);
+        board.setTile(position,7);
+
+        assertAll(
+                () -> assertEquals(1, board.getIncorrectSections().size()),
+                () -> assertEquals(sectionRow, board.getIncorrectSections().get(0))
+        );
+    }
+
+    @Test
+    @DisplayName("Get a list of Sections containing faulty Tiles")
+    void getIncorrectSectionsReturnsEmptyList() {
+        Assertions.assertEquals(0, board.getIncorrectSections().size());
+    }
+
+    @Test
+    @DisplayName("Clears and sets every Tile's value to empty")
+    void clearAllEditableTilesReturnsZero() {
+        Position position = new Position(2,4);
+        board.getTile(position).setEditable(true);
+        board.clear();
+        Assertions.assertEquals(0, board.getTile(position).getCurrentValue());
     }
 }
