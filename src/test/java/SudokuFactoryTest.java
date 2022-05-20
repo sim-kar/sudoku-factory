@@ -19,12 +19,13 @@ class SudokuFactoryTest {
 
     /**
      * 17 is the lowest limit of clues (filled in numbers in a Sudoku puzzle) where it is possible
-     * to have a single solution.
+     * to have a single solution. Finding a new 17 hint puzzle is an astronomical challenge. For
+     * our program to run decently fast we set the lower limit a big higher.
      */
     @Test
-    @DisplayName("Creating board with less than 17 clues throws exception")
-    void creatingBoardWithLessThan17CluesThrowsException() {
-        assertThrows(IllegalArgumentException.class, () -> factory.create(16));
+    @DisplayName("Creating board with less than 25 clues throws exception")
+    void creatingBoardWithLessThan25CluesThrowsException() {
+        assertThrows(IllegalArgumentException.class, () -> factory.create(24));
     }
 
     /**

@@ -8,10 +8,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class SudokuFactory implements Factory {
-    // FIXME: does minimum clues have to be increased?
-    //  Some testing suggests that anything less than 23 takes too long to be practical
-    //  Using 25 or more reduces the variance in time taken to create a puzzle even more
-    private static final int MIN_CLUES = 17;
+    // 6,670,903,752,021,072,936,960 possible sudoku boards and so far around 49,000 puzzles with
+    // the lowest possible amount of clues (17) have been found. We need to set our lower limit
+    // slightly higher than this...
+    private static final int MIN_CLUES = 25;
     private static final int MAX_CLUES = 81;
     private static final int EMPTY = 0;
     private final Solver solver;
