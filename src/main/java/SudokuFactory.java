@@ -7,6 +7,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Used to create valid Sudoku puzzle boards.
+ */
 public class SudokuFactory implements Factory {
     // 6,670,903,752,021,072,936,960 possible sudoku boards and so far around 49,000 puzzles with
     // the lowest possible amount of clues (17) have been found. We need to set our lower limit
@@ -16,14 +19,32 @@ public class SudokuFactory implements Factory {
     private static final int EMPTY = 0;
     private final Solver solver;
 
+    /**
+     * Create a new Sudoku factory.
+     *
+     * @param solver a solver used to generate new boards
+     */
     public SudokuFactory(Solver solver) {
         this.solver = solver;
     }
 
+    /**
+     * Create a valid Sudoku puzzle board. A Sudoku board is 9x9 tiles, where each row, column
+     * and nine 3x3 blocks can only contain the numbers 1 to 9 without any duplicates. There are
+     * also empty tiles to be filled in. For a board to be considered valid there can only be a
+     * single solution.
+     *
+     * A board consists of empty tiles to be filled in, and clues which are tiles containing the
+     * correct number. A Sudoku board can have at most 81 clues, since there are 81 tiles. The
+     * minimum amount of clues required by this method is 25.
+     *
+     * @param clues the number of correct tiles to show on the board
+     * @return a Sudoku puzzle board with the amount of supplied clues
+     */
     @Override
     public Board create(int clues) {
         if (clues < MIN_CLUES) {
-            throw new IllegalArgumentException("There must be at least 17 clues");
+            throw new IllegalArgumentException("There must be at least 25 clues");
         }
 
         if (clues > MAX_CLUES) {
@@ -43,8 +64,8 @@ public class SudokuFactory implements Factory {
             solution = solver.generate(empty);
             puzzle = copy2DArray(solution);
 
-            // shuffle the order that positions are removed each time, or it will always remove
-            // the tiles in the same position, and in the same order, every time
+            // shuffle the order of positions, or tiles will be removed
+            // in the same position and order every time
             Collections.shuffle(positions);
 
             for (Position position : positions) {
@@ -66,7 +87,9 @@ public class SudokuFactory implements Factory {
         return getBoard(solution, puzzle);
     }
 
-    // get a list of all x, y positions on a 9x9 board
+    /**
+     * Get a list of positions for all x and y positions on a 9x9 board, ordered in ascending order.
+     */
     private List<Position> getPositions() {
         List<Position> positions = new ArrayList<>();
 
@@ -79,15 +102,24 @@ public class SudokuFactory implements Factory {
         return positions;
     }
 
-    // get a copy of a 2d array
+    /**
+     * Get a copy of the given 2D integer array.
+     */
     private int[][] copy2DArray(int[][] board) {
         return Arrays.stream(board)
                 .map(int[]::clone)
                 .toArray(int[][]::new);
     }
 
-    // get a Sudoku board from a solution containing all the correct values, and a puzzle with
-    // containing empty tiles
+    /**
+     * Get a Sudoku puzzle from a 9x9 2D array containing all the correct values on the board,
+     * and a 9x9 2D array containing the clues and empty tiles. The created board has the correct
+     * value for each tile, and the empty tiles are editable and have their current value cleared.
+     *
+     * @param solution a 9x9 2D array with all correct values
+     * @param puzzle a 9x9 2D array with all clues and empty tiles
+     * @return a 9x9 sudoku board with the tiles initialized according to the given parameters
+     */
     private Board getBoard(int[][] solution, int[][] puzzle) {
         List<Set<Tile>> tilesInRows = Stream.generate(HashSet<Tile>::new)
                 .limit(9)
@@ -99,8 +131,7 @@ public class SudokuFactory implements Factory {
                 .limit(9)
                 .collect(Collectors.toCollection(ArrayList::new));
 
-        List<Position> positions = getPositions();
-        for (Position position : positions) {
+        for (Position position : getPositions()) {
             int x = position.getX();
             int y = position.getY();
             int blockIndex = getBlockIndex(x, y);
@@ -130,7 +161,9 @@ public class SudokuFactory implements Factory {
         return new SudokuBoard(rows, columns, blocks);
     }
 
-    // get the index of a block 0-8 in linear order
+    /**
+     * Get the index of a block (0-8) in linear order.
+     */
     private int getBlockIndex(int x, int y) {
         /*
         Indexes of all blocks:
