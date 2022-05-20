@@ -89,6 +89,25 @@ class SudokuFactoryTest {
         assertNotEquals(matrixOfBoard, matrixOfBoard2);
     }
 
+    @Test
+    @DisplayName("Created boards are unique")
+    void createdBoardsAreUnique() {
+        Board board = factory.create(30);
+
+        int[][] matrixOfBoard = new int[9][9];
+        for (int i = 0; i < 9; i++) {
+            Section row = board.getRow(i);
+
+            for (Tile tile : row.getTiles()) {
+                int x = tile.getPosition().getX();
+                int y = tile.getPosition().getY();
+                matrixOfBoard[y][x] = tile.getCurrentValue();
+            }
+        }
+
+        assertTrue(solver.isUnique(matrixOfBoard));
+    }
+
     // Using the test instance annotation allows the use non-static methods in parameterized tests
     // which allows us to use such tests in this nested class
     @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -277,6 +296,4 @@ class SudokuFactoryTest {
             assertEquals(9, correctValues.size());
         }
     }
-
-    // FIXME: how to test that board is unique?
 }
