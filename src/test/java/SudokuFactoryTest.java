@@ -2,6 +2,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -14,7 +17,6 @@ class SudokuFactoryTest {
     Solver solver = new SudokuSolver(random);
     Factory factory = new SudokuFactory(solver);
 
-    // FIXME: does lower limit have to be increased?
     /**
      * 17 is the lowest limit of clues (filled in numbers in a Sudoku puzzle) where it is possible
      * to have a single solution.
@@ -42,6 +44,7 @@ class SudokuFactoryTest {
         int allTiles = 81;
         Set<Tile> incorrectTiles = new HashSet<>();
         List<Section> incorrectSections = board.getIncorrectSections();
+
         for (Section section : incorrectSections) {
             incorrectTiles.addAll(section.getIncorrectTiles());
         }
@@ -62,37 +65,20 @@ class SudokuFactoryTest {
 
         // SudokuBoard doesn't have an equals method; convert to 2d arrays and compare
         int[][] matrixOfBoard = new int[9][9];
-        Section[] rowsInBoard = new Section[]{
-                board.getRow(0),
-                board.getRow(1),
-                board.getRow(2),
-                board.getRow(3),
-                board.getRow(4),
-                board.getRow(5),
-                board.getRow(6),
-                board.getRow(7),
-                board.getRow(8),
-        };
-        for (Section row : rowsInBoard) {
+        for (int i = 0; i < 9; i++) {
+            Section row = board.getRow(i);
+
             for (Tile tile : row.getTiles()) {
                 int x = tile.getPosition().getX();
                 int y = tile.getPosition().getY();
                 matrixOfBoard[y][x] = tile.getCurrentValue();
             }
         }
+
         int[][] matrixOfBoard2 = new int[9][9];
-        Section[] rowsInBoard2 = new Section[]{
-                board2.getRow(0),
-                board2.getRow(1),
-                board2.getRow(2),
-                board2.getRow(3),
-                board2.getRow(4),
-                board2.getRow(5),
-                board2.getRow(6),
-                board2.getRow(7),
-                board2.getRow(8),
-        };
-        for (Section row : rowsInBoard2) {
+        for (int i = 0; i < 9; i++) {
+            Section row = board2.getRow(i);
+
             for (Tile tile : row.getTiles()) {
                 int x = tile.getPosition().getX();
                 int y = tile.getPosition().getY();
@@ -103,6 +89,9 @@ class SudokuFactoryTest {
         assertNotEquals(matrixOfBoard, matrixOfBoard2);
     }
 
+    // Using the test instance annotation allows the use non-static methods in parameterized tests
+    // which allows us to use such tests in this nested class
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     @Nested
     @DisplayName("Conforms to Sudoku rules")
     class SudokuRulesTest {
@@ -110,6 +99,32 @@ class SudokuFactoryTest {
         Solver solver = new SudokuSolver(random);
         Factory factory = new SudokuFactory(solver);
         Board board = factory.create(40);
+
+        Set<Section> rows() {
+            Set<Section> rows = new HashSet<>();
+            for (int i = 0; i < 9; i++) {
+                rows.add(board.getRow(i));
+            }
+            return rows;
+        }
+
+        Set<Section> columns() {
+            Set<Section> columns = new HashSet<>();
+            for (int i = 0; i < 9; i++) {
+                columns.add(board.getColumn(i));
+            }
+            return columns;
+        }
+
+        Set<Section> blocks() {
+            Set<Section> blocks = new HashSet<>();
+            for (int y = 0; y <= 6; y += 3) {
+                for (int x = 0; x <= 6; x += 3) {
+                    blocks.add(board.getBlock(new Position(x, y)));
+                }
+            }
+            return blocks;
+        }
 
 
         @Test
@@ -157,543 +172,111 @@ class SudokuFactoryTest {
             );
         }
 
-        @Test
+        @ParameterizedTest
+        @MethodSource(value = "rows")
         @DisplayName("Each row on created board has nine tiles")
-        void rowsOnBoardHaveNineTiles() {
-            assertAll(
-                    () -> assertEquals(9, board.getRow(0)
-                            .getTiles()
-                            .size()),
-                    () -> assertEquals(9, board.getRow(1)
-                            .getTiles()
-                            .size()),
-                    () -> assertEquals(9, board.getRow(2)
-                            .getTiles()
-                            .size()),
-                    () -> assertEquals(9, board.getRow(3)
-                            .getTiles()
-                            .size()),
-                    () -> assertEquals(9, board.getRow(4)
-                            .getTiles()
-                            .size()),
-                    () -> assertEquals(9, board.getRow(5)
-                            .getTiles()
-                            .size()),
-                    () -> assertEquals(9, board.getRow(6)
-                            .getTiles()
-                            .size()),
-                    () -> assertEquals(9, board.getRow(7)
-                            .getTiles()
-                            .size()),
-                    () -> assertEquals(9, board.getRow(8)
-                            .getTiles()
-                            .size())
-            );
+        void rowsOnBoardHaveNineTiles(Section row) {
+            assertEquals(9, row.getTiles().size());
         }
 
-        @Test
+        @ParameterizedTest
+        @MethodSource(value = "columns")
         @DisplayName("Each column on created board has nine tiles")
-        void columnsOnBoardHaveNineTiles() {
-            assertAll(
-                    () -> assertEquals(9, board.getColumn(0)
-                            .getTiles()
-                            .size()),
-                    () -> assertEquals(9, board.getColumn(1)
-                            .getTiles()
-                            .size()),
-                    () -> assertEquals(9, board.getColumn(2)
-                            .getTiles()
-                            .size()),
-                    () -> assertEquals(9, board.getColumn(3)
-                            .getTiles()
-                            .size()),
-                    () -> assertEquals(9, board.getColumn(4)
-                            .getTiles()
-                            .size()),
-                    () -> assertEquals(9, board.getColumn(5)
-                            .getTiles()
-                            .size()),
-                    () -> assertEquals(9, board.getColumn(6)
-                            .getTiles()
-                            .size()),
-                    () -> assertEquals(9, board.getColumn(7)
-                            .getTiles()
-                            .size()),
-                    () -> assertEquals(9, board.getColumn(8)
-                            .getTiles()
-                            .size())
-            );
+        void columnsOnBoardHaveNineTiles(Section column) {
+            assertEquals(9, column.getTiles().size());
         }
 
-        @Test
+        @ParameterizedTest
+        @MethodSource(value = "blocks")
         @DisplayName("Each block on created board has nine tiles")
-        void blocksOnBoardHaveNineTiles() {
-            assertAll(
-                    () -> assertEquals(9, board.getBlock(new Position(0, 0))
-                            .getTiles()
-                            .size()),
-                    () -> assertEquals(9, board.getBlock(new Position(0, 3))
-                            .getTiles()
-                            .size()),
-                    () -> assertEquals(9, board.getBlock(new Position(0, 6))
-                            .getTiles()
-                            .size()),
-                    () -> assertEquals(9, board.getBlock(new Position(3, 0))
-                            .getTiles()
-                            .size()),
-                    () -> assertEquals(9, board.getBlock(new Position(3, 3))
-                            .getTiles()
-                            .size()),
-                    () -> assertEquals(9, board.getBlock(new Position(3, 6))
-                            .getTiles()
-                            .size()),
-                    () -> assertEquals(9, board.getBlock(new Position(6, 0))
-                            .getTiles()
-                            .size()),
-                    () -> assertEquals(9, board.getBlock(new Position(6, 3))
-                            .getTiles()
-                            .size()),
-                    () -> assertEquals(9, board.getBlock(new Position(6, 6))
-                            .getTiles()
-                            .size())
-            );
+        void blocksOnBoardHaveNineTiles(Section block) {
+            assertEquals(9, block.getTiles().size());
         }
 
-        @Test
+        @ParameterizedTest
+        @MethodSource(value = "rows")
         @DisplayName("Created board only contains current values >=0")
-        void createdBoardOnlyContainsCurrentValuesGreaterThanOrEqualsZero() {
-            Set<Integer> row0 = board.getRow(0)
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCurrentValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> row1 = board.getRow(1)
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCurrentValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> row2 = board.getRow(2)
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCurrentValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> row3 = board.getRow(3)
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCurrentValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> row4 = board.getRow(4)
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCurrentValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> row5 = board.getRow(5)
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCurrentValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> row6 = board.getRow(6)
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCurrentValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> row7 = board.getRow(7)
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCurrentValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> row8 = board.getRow(8)
-                    .getTiles()
+        void createdBoardOnlyContainsCurrentValuesGreaterThanOrEqualsZero(Section row) {
+            Set<Integer> currentValues = row.getTiles()
                     .stream()
                     .map(Tile::getCurrentValue)
                     .collect(Collectors.toSet());
 
-            assertAll(
-                    () -> assertTrue(Collections.min(row0) >= 0),
-                    () -> assertTrue(Collections.min(row1) >= 0),
-                    () -> assertTrue(Collections.min(row2) >= 0),
-                    () -> assertTrue(Collections.min(row3) >= 0),
-                    () -> assertTrue(Collections.min(row4) >= 0),
-                    () -> assertTrue(Collections.min(row5) >= 0),
-                    () -> assertTrue(Collections.min(row6) >= 0),
-                    () -> assertTrue(Collections.min(row7) >= 0),
-                    () -> assertTrue(Collections.min(row8) >= 0)
-            );
+            assertTrue(Collections.min(currentValues) >= 0);
         }
 
-        @Test
+        @ParameterizedTest
+        @MethodSource(value = "rows")
         @DisplayName("Created board only contains current values <=9")
-        void createdBoardOnlyContainsCurrentValuesLessThanOrEqualsNine() {
-            Set<Integer> row0 = board.getRow(0)
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCurrentValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> row1 = board.getRow(1)
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCurrentValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> row2 = board.getRow(2)
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCurrentValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> row3 = board.getRow(3)
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCurrentValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> row4 = board.getRow(4)
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCurrentValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> row5 = board.getRow(5)
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCurrentValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> row6 = board.getRow(6)
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCurrentValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> row7 = board.getRow(7)
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCurrentValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> row8 = board.getRow(8)
-                    .getTiles()
+        void createdBoardOnlyContainsCurrentValuesLessThanOrEqualsNine(Section row) {
+            Set<Integer> currentValues = row.getTiles()
                     .stream()
                     .map(Tile::getCurrentValue)
                     .collect(Collectors.toSet());
 
-            assertAll(
-                    () -> assertTrue(Collections.max(row0) <= 9),
-                    () -> assertTrue(Collections.max(row1) <= 9),
-                    () -> assertTrue(Collections.max(row2) <= 9),
-                    () -> assertTrue(Collections.max(row3) <= 9),
-                    () -> assertTrue(Collections.max(row4) <= 9),
-                    () -> assertTrue(Collections.max(row5) <= 9),
-                    () -> assertTrue(Collections.max(row6) <= 9),
-                    () -> assertTrue(Collections.max(row7) <= 9),
-                    () -> assertTrue(Collections.max(row8) <= 9)
-            );
+            assertTrue(Collections.max(currentValues) <= 9);
         }
 
-        @Test
+        @ParameterizedTest
+        @MethodSource(value = "rows")
         @DisplayName("Created board only contains correct values >=1")
-        void createdBoardOnlyContainsCorrectValuesGreaterThanOrEqualsToOne() {
-            Set<Integer> row0 = board.getRow(0)
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCorrectValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> row1 = board.getRow(1)
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCorrectValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> row2 = board.getRow(2)
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCorrectValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> row3 = board.getRow(3)
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCorrectValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> row4 = board.getRow(4)
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCorrectValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> row5 = board.getRow(5)
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCorrectValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> row6 = board.getRow(6)
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCorrectValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> row7 = board.getRow(7)
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCorrectValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> row8 = board.getRow(8)
-                    .getTiles()
+        void createdBoardOnlyContainsCorrectValuesGreaterThanOrEqualsToOne(Section row) {
+            Set<Integer> correctValues = row.getTiles()
                     .stream()
                     .map(Tile::getCorrectValue)
                     .collect(Collectors.toSet());
 
-            assertAll(
-                    () -> assertTrue(Collections.min(row0) >= 1),
-                    () -> assertTrue(Collections.min(row1) >= 1),
-                    () -> assertTrue(Collections.min(row2) >= 1),
-                    () -> assertTrue(Collections.min(row3) >= 1),
-                    () -> assertTrue(Collections.min(row4) >= 1),
-                    () -> assertTrue(Collections.min(row5) >= 1),
-                    () -> assertTrue(Collections.min(row6) >= 1),
-                    () -> assertTrue(Collections.min(row7) >= 1),
-                    () -> assertTrue(Collections.min(row8) >= 1)
-            );
+            assertTrue(Collections.min(correctValues) >= 1);
         }
 
-        @Test
+        @ParameterizedTest
+        @MethodSource(value = "rows")
         @DisplayName("Created board only contains correct values <=9")
-        void createdBoardOnlyContainsCorrectValuesLessThanOrEqualsNine() {
-            Set<Integer> row0 = board.getRow(0)
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCorrectValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> row1 = board.getRow(1)
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCorrectValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> row2 = board.getRow(2)
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCorrectValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> row3 = board.getRow(3)
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCorrectValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> row4 = board.getRow(4)
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCorrectValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> row5 = board.getRow(5)
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCorrectValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> row6 = board.getRow(6)
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCorrectValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> row7 = board.getRow(7)
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCorrectValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> row8 = board.getRow(8)
-                    .getTiles()
+        void createdBoardOnlyContainsCorrectValuesLessThanOrEqualsNine(Section row) {
+            Set<Integer> correctValues = row.getTiles()
                     .stream()
                     .map(Tile::getCorrectValue)
                     .collect(Collectors.toSet());
 
-            assertAll(
-                    () -> assertTrue(Collections.max(row0) >= 9),
-                    () -> assertTrue(Collections.max(row1) >= 9),
-                    () -> assertTrue(Collections.max(row2) >= 9),
-                    () -> assertTrue(Collections.max(row3) >= 9),
-                    () -> assertTrue(Collections.max(row4) >= 9),
-                    () -> assertTrue(Collections.max(row5) >= 9),
-                    () -> assertTrue(Collections.max(row6) >= 9),
-                    () -> assertTrue(Collections.max(row7) >= 9),
-                    () -> assertTrue(Collections.max(row8) >= 9)
-            );
+            assertTrue(Collections.max(correctValues) <= 9);
         }
 
-        @Test
+        @ParameterizedTest
+        @MethodSource(value = "rows")
         @DisplayName("The correct values in each row contain no duplicates")
-        void correctValuesInRowsContainNoDuplicates() {
-            Set<Integer> row0 = board.getRow(0)
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCorrectValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> row1 = board.getRow(1)
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCorrectValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> row2 = board.getRow(2)
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCorrectValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> row3 = board.getRow(3)
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCorrectValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> row4 = board.getRow(4)
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCorrectValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> row5 = board.getRow(5)
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCorrectValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> row6 = board.getRow(6)
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCorrectValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> row7 = board.getRow(7)
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCorrectValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> row8 = board.getRow(8)
-                    .getTiles()
+        void correctValuesInRowsContainNoDuplicates(Section row) {
+            Set<Integer> correctValues = row.getTiles()
                     .stream()
                     .map(Tile::getCorrectValue)
                     .collect(Collectors.toSet());
 
-            assertAll(
-                    () -> assertEquals(9, row0.size()),
-                    () -> assertEquals(9, row1.size()),
-                    () -> assertEquals(9, row2.size()),
-                    () -> assertEquals(9, row3.size()),
-                    () -> assertEquals(9, row4.size()),
-                    () -> assertEquals(9, row5.size()),
-                    () -> assertEquals(9, row6.size()),
-                    () -> assertEquals(9, row7.size()),
-                    () -> assertEquals(9, row8.size())
-            );
+            assertEquals(9, correctValues.size());
         }
 
-        @Test
+        @ParameterizedTest
+        @MethodSource(value = "columns")
         @DisplayName("The correct values in each column contain no duplicates")
-        void correctValuesInColumnsContainNoDuplicates() {
-            Set<Integer> column0 = board.getColumn(0)
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCorrectValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> column1 = board.getColumn(1)
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCorrectValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> column2 = board.getColumn(2)
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCorrectValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> column3 = board.getColumn(3)
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCorrectValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> column4 = board.getColumn(4)
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCorrectValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> column5 = board.getColumn(5)
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCorrectValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> column6 = board.getColumn(6)
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCorrectValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> column7 = board.getColumn(7)
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCorrectValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> column8 = board.getColumn(8)
-                    .getTiles()
+        void correctValuesInColumnsContainNoDuplicates(Section column) {
+            Set<Integer> correctValues = column.getTiles()
                     .stream()
                     .map(Tile::getCorrectValue)
                     .collect(Collectors.toSet());
 
-            assertAll(
-                    () -> assertEquals(9, column0.size()),
-                    () -> assertEquals(9, column1.size()),
-                    () -> assertEquals(9, column2.size()),
-                    () -> assertEquals(9, column3.size()),
-                    () -> assertEquals(9, column4.size()),
-                    () -> assertEquals(9, column5.size()),
-                    () -> assertEquals(9, column6.size()),
-                    () -> assertEquals(9, column7.size()),
-                    () -> assertEquals(9, column8.size())
-            );
+            assertEquals(9, correctValues.size());
         }
 
-        @Test
+        @ParameterizedTest
+        @MethodSource(value = "blocks")
         @DisplayName("The correct values in each block contain no duplicates")
-        void correctValuesInBlocksContainNoDuplicates() {
-            Set<Integer> block0 = board.getBlock(new Position(0, 0))
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCorrectValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> block1 = board.getBlock(new Position(0, 3))
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCorrectValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> block2 = board.getBlock(new Position(0, 6))
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCorrectValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> block3 = board.getBlock(new Position(3, 0))
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCorrectValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> block4 = board.getBlock(new Position(3, 3))
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCorrectValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> block5 = board.getBlock(new Position(3, 6))
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCorrectValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> block6 = board.getBlock(new Position(6, 0))
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCorrectValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> block7 = board.getBlock(new Position(6, 3))
-                    .getTiles()
-                    .stream()
-                    .map(Tile::getCorrectValue)
-                    .collect(Collectors.toSet());
-            Set<Integer> block8 = board.getBlock(new Position(6, 6))
-                    .getTiles()
+        void correctValuesInBlocksContainNoDuplicates(Section block) {
+            Set<Integer> correctValues = block.getTiles()
                     .stream()
                     .map(Tile::getCorrectValue)
                     .collect(Collectors.toSet());
 
-            assertAll(
-                    () -> assertEquals(9, block0.size()),
-                    () -> assertEquals(9, block1.size()),
-                    () -> assertEquals(9, block2.size()),
-                    () -> assertEquals(9, block3.size()),
-                    () -> assertEquals(9, block4.size()),
-                    () -> assertEquals(9, block5.size()),
-                    () -> assertEquals(9, block6.size()),
-                    () -> assertEquals(9, block7.size()),
-                    () -> assertEquals(9, block8.size())
-            );
+            assertEquals(9, correctValues.size());
         }
     }
 
     // FIXME: how to test that board is unique?
-    // generated board is unique (get each tile from board to create int[][], use solver to solve?)
 }
