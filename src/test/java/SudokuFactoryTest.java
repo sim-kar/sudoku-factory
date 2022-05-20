@@ -163,13 +163,16 @@ class SudokuFactoryTest {
         @DisplayName("Created board has nine rows")
         void createdBoardHasNineRows() {
             Set<Section> rows = new HashSet<>();
-            for (int i = 0; i < 9; i++) {
-                rows.add(board.getRow(i));
+
+            Section row;
+            int i = 0;
+            while ((row = board.getRow(i)) != null) {
+                rows.add(row);
+                i++;
             }
 
             assertAll(
-                    () -> assertEquals(9, rows.size()),
-                    () -> assertNull(board.getRow(9))
+                    () -> assertEquals(9, rows.size())
             );
         }
 
@@ -177,13 +180,16 @@ class SudokuFactoryTest {
         @DisplayName("Created board has nine columns")
         void createdBoardHasNineColumns() {
             Set<Section> columns = new HashSet<>();
-            for (int i = 0; i < 9; i++) {
-                columns.add(board.getColumn(i));
+
+            Section column;
+            int i = 0;
+            while ((column = board.getRow(i)) != null) {
+                columns.add(column);
+                i++;
             }
 
             assertAll(
-                    () -> assertEquals(9, columns.size()),
-                    () -> assertNull(board.getColumn(9))
+                    () -> assertEquals(9, columns.size())
             );
         }
 
@@ -191,16 +197,17 @@ class SudokuFactoryTest {
         @DisplayName("Created board has nine blocks")
         void createdBoardHasNineBlocks() {
             Set<Section> blocks = new HashSet<>();
-            for (int row = 0; row <= 6; row += 3) {
-                for (int column = 0; column <= 6; column += 3) {
-                    blocks.add(board.getBlock(new Position(column, row)));
+
+            // get an extra row and column to make sure there aren't more than 9 blocks
+            for (int row = 0; row <= 10; row++) {
+                for (int column = 0; column <= 10; column++) {
+                    Section block = board.getBlock(new Position(column, row));
+                    if (block != null) blocks.add(block);
                 }
             }
 
             assertAll(
-                    () -> assertEquals(9, blocks.size()),
-                    () -> assertNull(board.getBlock(new Position(9, 0))),
-                    () -> assertNull(board.getBlock(new Position(0, 9)))
+                    () -> assertEquals(9, blocks.size())
             );
         }
 
