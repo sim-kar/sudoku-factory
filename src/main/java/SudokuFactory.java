@@ -99,21 +99,22 @@ public class SudokuFactory implements Factory {
                 .limit(9)
                 .collect(Collectors.toCollection(ArrayList::new));
 
-        for (int y = 0; y < 9; y++) {
-            for (int x = 0; x < 9; x++) {
-                int blockIndex = getBlockIndex(x, y);
-                int value = solution[y][x];
-                Tile tile = new SudokuTile(value, new Position(x, y));
+        List<Position> positions = getPositions();
+        for (Position position : positions) {
+            int x = position.getX();
+            int y = position.getY();
+            int blockIndex = getBlockIndex(x, y);
+            int value = solution[y][x];
 
-                if (puzzle[y][x] == EMPTY) {
-                    tile.setEditable(true);
-                    tile.clear();
-                }
-
-                tilesInRows.get(y).add(tile);
-                tilesInColumns.get(x).add(tile);
-                tilesInBlocks.get(blockIndex).add(tile);
+            Tile tile = new SudokuTile(value, position);
+            if (puzzle[y][x] == EMPTY) {
+                tile.setEditable(true);
+                tile.clear();
             }
+
+            tilesInRows.get(y).add(tile);
+            tilesInColumns.get(x).add(tile);
+            tilesInBlocks.get(blockIndex).add(tile);
         }
 
         Section[] rows = new Section[9];
