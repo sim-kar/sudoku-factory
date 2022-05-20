@@ -28,6 +28,12 @@ class SudokuFactoryTest {
         assertThrows(IllegalArgumentException.class, () -> factory.create(24));
     }
 
+    @Test
+    @DisplayName("Can create a board with 25 clues")
+    void canCreateBoardWith25Clues() {
+        assertEquals(SudokuBoard.class, (factory.create(25).getClass()));
+    }
+
     /**
      * 81 is the total number of tiles on a Sudoku board. Therefore, it shouldn't be possible to
      * have more clues (filled in numbers in a Sudoku puzzle) than that.
@@ -36,6 +42,12 @@ class SudokuFactoryTest {
     @DisplayName("Creating board with more than 81 clues throws exception")
     void creatingBoardWithMoreThan81CluesThrowsException() {
         assertThrows(IllegalArgumentException.class, () -> factory.create(82));
+    }
+
+    @Test
+    @DisplayName("Can create a board with 81 clues")
+    void canCreateBoardWith81Clues() {
+        assertEquals(SudokuBoard.class, (factory.create(81).getClass()));
     }
 
     @Test
@@ -56,13 +68,13 @@ class SudokuFactoryTest {
     @Test
     @DisplayName("Creating a new board should not return the same board every time")
     void createdBoardsAreRandomized() {
-        Board board = factory.create(81);
+        Board board = factory.create(60);
 
         // create another board that uses a different seed
         Random random2 = new Random(1L);
         Solver solver2 = new SudokuSolver(random2);
         Factory factory2 = new SudokuFactory(solver2);
-        Board board2 = factory2.create(81);
+        Board board2 = factory2.create(60);
 
         // SudokuBoard doesn't have an equals method; convert to 2d arrays and compare
         int[][] matrixOfBoard = new int[9][9];
