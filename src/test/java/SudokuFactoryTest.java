@@ -20,7 +20,7 @@ class SudokuFactoryTest {
     /**
      * 17 is the lowest limit of clues (filled in numbers in a Sudoku puzzle) where it is possible
      * to have a single solution. Finding a new 17 hint puzzle is an astronomical challenge. For
-     * our program to run decently fast we set the lower limit a big higher.
+     * our program to run decently fast we set the lower limit a bit higher.
      */
     @Test
     @DisplayName("Creating board with less than 25 clues throws exception")
@@ -121,8 +121,8 @@ class SudokuFactoryTest {
         assertTrue(solver.isUnique(matrixOfBoard));
     }
 
-    // Using the test instance annotation allows the use non-static methods in parameterized tests
-    // which allows us to use such tests in this nested class
+    // Using the test instance annotation allows the use of non-static methods in parameterized
+    // tests which allows us to use such tests in this nested class
     @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     @Nested
     @DisplayName("Conforms to Sudoku rules")
@@ -198,7 +198,7 @@ class SudokuFactoryTest {
         void createdBoardHasNineBlocks() {
             Set<Section> blocks = new HashSet<>();
 
-            // get an extra row and column to make sure there aren't more than 9 blocks
+            // get extra rows and columns to make sure there aren't more than 9 blocks
             for (int row = 0; row <= 10; row++) {
                 for (int column = 0; column <= 10; column++) {
                     Section block = board.getBlock(new Position(column, row));
