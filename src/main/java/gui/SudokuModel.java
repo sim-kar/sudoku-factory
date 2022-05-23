@@ -4,6 +4,7 @@ import org.jetbrains.annotations.Nullable;
 import sudoku.Board;
 import sudoku.Factory;
 import sudoku.Position;
+import sudoku.Tile;
 import javax.swing.SwingWorker;
 import java.util.ArrayList;
 import java.util.List;
@@ -87,8 +88,10 @@ public class SudokuModel implements Model {
     }
 
     @Override
-    public int getValueAt(Position xy) {
-        return -1;
+    public int getValueAt(Position xy) throws IllegalStateException {
+        if (board == null) throw new IllegalStateException("No puzzle has been created");
+
+        return board.getTile(xy).getCurrentValue();
     }
 
     @Override
