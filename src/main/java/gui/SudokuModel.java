@@ -83,8 +83,14 @@ public class SudokuModel implements Model {
     }
 
     @Override
-    public void setValueAt(Position xy, int value) {
+    public void setValueAt(Position xy, int value) throws IllegalStateException {
+        if (board == null) throw new IllegalStateException("No puzzle has been created");
 
+        Tile tile = board.getTile(xy);
+        if (tile.isEditable()) {
+            board.getTile(xy).setCurrentValue(value);
+            notifyChangeObservers();
+        }
     }
 
     @Override
