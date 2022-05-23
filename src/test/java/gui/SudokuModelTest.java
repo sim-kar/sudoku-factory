@@ -175,8 +175,8 @@ class SudokuModelTest {
     void canGetSectionsWithAllMistakes() {
         // since there is a mistake in each column, the set should contain all positions
         Set<Position> sectionsWithMistakes = new HashSet<>();
-        for (int x = 0; x < 9; x++) {
-            for (int y = 0; y < 9; y++) {
+        for (int x = 0; x < 3; x++) {
+            for (int y = 0; y < 3; y++) {
                 sectionsWithMistakes.add(new Position(x, y));
             }
         }
