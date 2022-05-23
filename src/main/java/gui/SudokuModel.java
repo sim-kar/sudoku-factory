@@ -1,5 +1,6 @@
 package gui;
 
+import org.jetbrains.annotations.Nullable;
 import sudoku.Board;
 import sudoku.Factory;
 import sudoku.Position;
@@ -50,28 +51,15 @@ public class SudokuModel implements Model {
 
     @Override
     public void createPuzzle(int clues) {
-        SwingWorker<Board, Void> worker = new SwingWorker<>() {
-            @Override
-            protected Board doInBackground() {
-                return factory.create(clues);
-            }
-
-            @Override
-            public void done() {
-                try {
-                    board = get();
-                    notifyChangeObservers();
-                } catch (InterruptedException | ExecutionException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-
-        worker.execute();
+        createPuzzleInBackground(clues, null);
     }
 
     @Override
     public void createPuzzle(int clues, CountDownLatch latch) {
+        createPuzzleInBackground(clues, latch);
+    }
+
+    private void createPuzzleInBackground(int clues, @Nullable CountDownLatch latch) {
         SwingWorker<Board, Void> worker = new SwingWorker<>() {
             @Override
             protected Board doInBackground() {
@@ -83,7 +71,7 @@ public class SudokuModel implements Model {
                 try {
                     board = get();
                     notifyChangeObservers();
-                    latch.countDown();
+                    if (latch != null) latch.countDown();
                 } catch (InterruptedException | ExecutionException e) {
                     e.printStackTrace();
                 }
