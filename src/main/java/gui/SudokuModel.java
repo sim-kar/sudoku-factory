@@ -101,8 +101,10 @@ public class SudokuModel implements Model {
     }
 
     @Override
-    public boolean isEditable(Position xy) {
-        return false;
+    public boolean isEditable(Position xy) throws IllegalStateException {
+        if (board == null) throw new IllegalStateException("No puzzle has been created");
+
+        return board.getTile(xy).isEditable();
     }
 
     @Override
