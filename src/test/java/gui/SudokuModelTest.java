@@ -225,8 +225,7 @@ class SudokuModelTest {
         model.registerObserver(observerMock);
         model.setValueAt(new Position(0, 1), 4);
 
-        // updateBoard is invoked when puzzle is created and when value is set
-        verify(observerMock, times(2)).updateBoard();
+        verify(observerMock).updateBoard();
     }
 
     @Test
@@ -253,8 +252,7 @@ class SudokuModelTest {
         model.removeObserver(observerMock);
         model.setValueAt(new Position(0, 1), 5);
 
-        // updateBoard is invoked when puzzle is created and when value is set
-        verify(observerMock, times(2)).updateBoard();
+        verify(observerMock, times(1)).updateBoard();
     }
 
     @Test
