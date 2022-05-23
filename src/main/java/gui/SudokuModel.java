@@ -3,9 +3,12 @@ package gui;
 import sudoku.Board;
 import sudoku.Factory;
 import sudoku.Position;
+import javax.swing.SwingWorker;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutionException;
 
 public class SudokuModel implements Model {
     private final Factory factory;
@@ -29,6 +32,12 @@ public class SudokuModel implements Model {
         this.changeObservers.remove(observer);
     }
 
+    private void notifyChangeObservers() {
+        for (BoardChangeObserver observer : changeObservers) {
+            observer.updateBoard();
+        }
+    }
+
     @Override
     public void registerObserver(BoardSolvedObserver observer) {
         this.solvedObservers.add(observer);
@@ -41,7 +50,47 @@ public class SudokuModel implements Model {
 
     @Override
     public void createPuzzle(int clues) {
+        SwingWorker<Board, Void> worker = new SwingWorker<>() {
+            @Override
+            protected Board doInBackground() {
+                return factory.create(clues);
+            }
 
+            @Override
+            public void done() {
+                try {
+                    board = get();
+                    notifyChangeObservers();
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        worker.execute();
+    }
+
+    @Override
+    public void createPuzzle(int clues, CountDownLatch latch) {
+        SwingWorker<Board, Void> worker = new SwingWorker<>() {
+            @Override
+            protected Board doInBackground() {
+                return factory.create(clues);
+            }
+
+            @Override
+            public void done() {
+                try {
+                    board = get();
+                    notifyChangeObservers();
+                    latch.countDown();
+                } catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        worker.execute();
     }
 
     @Override
