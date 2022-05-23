@@ -2,7 +2,7 @@ package gui;
 
 import sudoku.Factory;
 import sudoku.Position;
-import java.util.List;
+import java.util.Set;
 
 public class SudokuModel implements Model {
     public SudokuModel(Factory factory) {
@@ -50,22 +50,22 @@ public class SudokuModel implements Model {
     }
 
     @Override
-    public List<Position> getSectionsWithMistakes() {
+    public Set<Position> getSectionsWithMistakes() {
         return null;
     }
 
     @Override
-    public List<Position> getSectionsWithMistakes(boolean ignoreEmptyTiles) {
+    public Set<Position> getSectionsWithMistakes(boolean ignoreEmptyTiles) {
         return null;
     }
 
     @Override
-    public List<Position> getDuplicates() {
+    public Set<Position> getDuplicates() {
         return null;
     }
 
     @Override
-    public List<Position> getDuplicates(boolean editableOnly) {
+    public Set<Position> getDuplicates(boolean editableOnly) {
         return null;
     }
 }

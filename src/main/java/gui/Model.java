@@ -1,6 +1,6 @@
 package gui;
 import sudoku.Position;
-import java.util.List;
+import java.util.Set;
 
 public interface Model {
     void registerObserver(BoardChangeObserver observer);
@@ -11,8 +11,8 @@ public interface Model {
     void setValueAt(Position xy, int value);
     int getValueAt(Position xy);
     boolean isEditable(Position xy);
-    List<Position> getSectionsWithMistakes();
-    List<Position> getSectionsWithMistakes(boolean ignoreEmptyTiles);
-    List<Position> getDuplicates();
-    List<Position> getDuplicates(boolean editableOnly);
+    Set<Position> getSectionsWithMistakes();
+    Set<Position> getSectionsWithMistakes(boolean ignoreEmptyTiles);
+    Set<Position> getDuplicates();
+    Set<Position> getDuplicates(boolean editableOnly);
 }
