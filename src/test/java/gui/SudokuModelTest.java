@@ -92,7 +92,7 @@ class SudokuModelTest {
     }
 
     @Test
-    @Timeout(value = 500, unit = TimeUnit.MILLISECONDS)
+    @Timeout(value = 1000, unit = TimeUnit.MILLISECONDS)
     @DisplayName("Creating a puzzle sets a new puzzle board")
     void creatingAPuzzleCreatesANewPuzzle() throws InterruptedException {
         Position position = new Position(0, 0);
@@ -197,7 +197,6 @@ class SudokuModelTest {
         assertEquals(duplicatePositions, model.getDuplicates());
     }
 
-    // get all duplicates
     @Test
     @DisplayName("Can get all positions that are duplicates")
     void canGetAllDuplicates() {
@@ -219,16 +218,11 @@ class SudokuModelTest {
     }
 
     @Test
-    @Timeout(value = 500, unit = TimeUnit.MILLISECONDS)
     @DisplayName("Registered observers are notified when a value on the board is changed")
-    void observersAreNotifiedWhenBoardIsChanged() throws InterruptedException {
+    void observersAreNotifiedWhenBoardIsChanged() {
         BoardChangeObserver observerMock = mock(BoardChangeObserver.class);
+
         model.registerObserver(observerMock);
-
-        CountDownLatch latch = new CountDownLatch(1);
-        model.createPuzzle(40, latch);
-        latch.await();
-
         model.setValueAt(new Position(0, 1), 4);
 
         // updateBoard is invoked when puzzle is created and when value is set
@@ -236,16 +230,11 @@ class SudokuModelTest {
     }
 
     @Test
-    @Timeout(value = 500, unit = TimeUnit.MILLISECONDS)
     @DisplayName("Registered observers are notified when the board is solved")
-    void observersAreNotifiedWhenBoardIsSolved() throws InterruptedException {
+    void observersAreNotifiedWhenBoardIsSolved() {
         BoardSolvedObserver observerMock = mock(BoardSolvedObserver.class);
+
         model.registerObserver(observerMock);
-
-        CountDownLatch latch = new CountDownLatch(1);
-        model.createPuzzle(40, latch);
-        latch.await();
-
         model.setValueAt(new Position(0, 1), 4);
         model.setValueAt(new Position(1, 1), 5);
         model.setValueAt(new Position(2, 1), 6);
@@ -254,15 +243,11 @@ class SudokuModelTest {
     }
 
     @Test
-    @Timeout(value = 500, unit = TimeUnit.MILLISECONDS)
     @DisplayName("Removed observers are not notified when a value on the board is changed")
-    void removedObserversAreNotifiedWhenBoardIsChanged() throws InterruptedException {
+    void removedObserversAreNotifiedWhenBoardIsChanged() {
         BoardChangeObserver observerMock = mock(BoardChangeObserver.class);
-        model.registerObserver(observerMock);
 
-        CountDownLatch latch = new CountDownLatch(1);
-        model.createPuzzle(40, latch);
-        latch.await();
+        model.registerObserver(observerMock);
         model.setValueAt(new Position(0, 1), 4);
 
         model.removeObserver(observerMock);
@@ -273,16 +258,11 @@ class SudokuModelTest {
     }
 
     @Test
-    @Timeout(value = 500, unit = TimeUnit.MILLISECONDS)
     @DisplayName("Removed observers are not notified when the board is solved")
-    void removedObserversAreNotNotifiedWhenBoardIsSolved() throws InterruptedException {
+    void removedObserversAreNotNotifiedWhenBoardIsSolved() {
         BoardSolvedObserver observerMock = mock(BoardSolvedObserver.class);
+
         model.registerObserver(observerMock);
-
-        CountDownLatch latch = new CountDownLatch(1);
-        model.createPuzzle(40, latch);
-        latch.await();
-
         model.setValueAt(new Position(0, 1), 4);
         model.setValueAt(new Position(1, 1), 5);
         model.setValueAt(new Position(2, 1), 6);
