@@ -31,7 +31,8 @@ class SudokuModelTest {
     Model model;
 
     @BeforeEach
-    void setup() {
+    @Timeout(value = 1000, unit = TimeUnit.MILLISECONDS)
+    void setup() throws InterruptedException {
         factoryMock = mock(SudokuFactory.class);
 
         /*
@@ -84,6 +85,10 @@ class SudokuModelTest {
         when(factoryMock.create(anyInt())).thenReturn(new SudokuBoard(rows, columns, block));
 
         model = new SudokuModel(factoryMock);
+
+        CountDownLatch latch = new CountDownLatch(1);
+        model.createPuzzle(40, latch);
+        latch.await();
     }
 
     @Test
@@ -91,28 +96,18 @@ class SudokuModelTest {
     @DisplayName("Creating a puzzle sets a new puzzle board")
     void creatingAPuzzleCreatesANewPuzzle() throws InterruptedException {
         Position position = new Position(0, 0);
-        Tile tile = new SudokuTile(1, position);
-        Tile newTile = new SudokuTile(2, position);
-        Section[] section = new Section[]{
-                new SudokuSection(new HashSet<>(List.of(tile)))
-        };
+
+        int valueInPuzzle = model.getValueAt(position);
+
+        Tile newTile = new SudokuTile(9, position);
         Section[] newSection = new Section[]{
                 new SudokuSection(new HashSet<>(List.of(newTile)))
         };
 
         when(factoryMock.create(anyInt())).thenReturn(
-                new SudokuBoard(section, section, section));
-
-        CountDownLatch latch = new CountDownLatch(1);
-        model.createPuzzle(40, latch);
-        latch.await();
-
-        int valueInPuzzle = model.getValueAt(position);
-
-        when(factoryMock.create(anyInt())).thenReturn(
                 new SudokuBoard(newSection, newSection, newSection));
 
-        latch = new CountDownLatch(1);
+        CountDownLatch latch = new CountDownLatch(1);
         model.createPuzzle(40, latch);
         latch.await();
 
@@ -236,7 +231,8 @@ class SudokuModelTest {
 
         model.setValueAt(new Position(0, 1), 4);
 
-        verify(observerMock).updateBoard();
+        // updateBoard is invoked when puzzle is created and when value is set
+        verify(observerMock, times(2)).updateBoard();
     }
 
     @Test
@@ -272,7 +268,8 @@ class SudokuModelTest {
         model.removeObserver(observerMock);
         model.setValueAt(new Position(0, 1), 5);
 
-        verify(observerMock, times(1)).updateBoard();
+        // updateBoard is invoked when puzzle is created and when value is set
+        verify(observerMock, times(2)).updateBoard();
     }
 
     @Test
