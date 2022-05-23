@@ -50,6 +50,12 @@ public class SudokuModel implements Model {
         this.solvedObservers.remove(observer);
     }
 
+    private void notifySolvedObservers() {
+        for (BoardSolvedObserver observer : solvedObservers) {
+            observer.solved();
+        }
+    }
+
     @Override
     public void createPuzzle(int clues) {
         createPuzzleInBackground(clues, null);
@@ -90,6 +96,8 @@ public class SudokuModel implements Model {
         if (tile.isEditable()) {
             board.getTile(xy).setCurrentValue(value);
             notifyChangeObservers();
+
+            if (board.isCorrect()) notifySolvedObservers();
         }
     }
 
