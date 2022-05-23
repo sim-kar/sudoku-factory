@@ -1,24 +1,25 @@
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import sudoku.Position;
 
 class PositionTest {
     @Test
-    @DisplayName("Creating Position with x = 1, getX returns 1")
+    @DisplayName("Creating sudoku.Position with x = 1, getX returns 1")
     public void createdPositionReturnsCorrectX() {
         Position position = new Position(1, 2);
         assertEquals(1, position.getX());
     }
 
     @Test
-    @DisplayName("Creating Position with y = 2, getY returns 2")
+    @DisplayName("Creating sudoku.Position with y = 2, getY returns 2")
     public void createdPositionReturnsCorrectY() {
         Position position = new Position(1, 2);
         assertEquals(2, position.getY());
     }
 
     @Test
-    @DisplayName("Using equals with the same Position object returns true")
+    @DisplayName("Using equals with the same sudoku.Position object returns true")
     public void usingEqualsWithSameObjectReturnsTrue() {
         Position position = new Position(1, 2);
         Position position2 = position;

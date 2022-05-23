@@ -1,5 +1,7 @@
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
+import sudoku.Position;
+import sudoku.SudokuTile;
 
 class SudokuTileTest {
     SudokuTile tile;
@@ -91,7 +93,7 @@ class SudokuTileTest {
     }
 
     @Test
-    @DisplayName("Creating SudokuTile with new Position, returns Position")
+    @DisplayName("Creating sudoku.SudokuTile with new sudoku.Position, returns sudoku.Position")
     void CreateSudokuTileAndGetPosition() {
         tile = new SudokuTile(1, position);
         Assertions.assertEquals(position, tile.getPosition());

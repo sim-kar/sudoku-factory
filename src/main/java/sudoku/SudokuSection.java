@@ -1,3 +1,5 @@
+package sudoku;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -12,7 +14,7 @@ public class SudokuSection implements Section{
     private Map<Position, Tile> tiles = new HashMap<>();
 
     /**
-     * Adding all the passed Tiles to a Map, with everyone's Position as its key.
+     * Adding all the passed Tiles to a Map, with everyone's sudoku.Position as its key.
      *
      * @param tiles The tiles to add.
      */

@@ -1,3 +1,5 @@
+package sudoku;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -175,12 +177,12 @@ public class SudokuFactory implements Factory {
         Adding the x-value divided by 3 (floor division) gives us the block index
 
         Ex: the tiles in block 4 have the positions {3, 3} to {5, 5}
-            Position {3, 3}:
+            sudoku.Position {3, 3}:
             row starting index: (3 // 3) * 3 = 3
             column offset:      3 // 3       = 1
             block index:        3 + 1        = 4
 
-            Position {5, 5}:
+            sudoku.Position {5, 5}:
             row starting index: (5 // 3) * 3 = 3
             column offset:      5 // 3       = 1
             block index:        3 + 1        = 4

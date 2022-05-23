@@ -4,6 +4,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
+import sudoku.Position;
+import sudoku.Section;
+import sudoku.SudokuBoard;
+import sudoku.SudokuSection;
+import sudoku.SudokuTile;
+import sudoku.Tile;
 
 class SudokuBoardTest {
     SudokuSection[] rows = new SudokuSection[1];
@@ -14,7 +20,7 @@ class SudokuBoardTest {
     SudokuTile tile;
 
     @BeforeEach
-    @DisplayName("Initialize variables for testing and create a SudokuBoard")
+    @DisplayName("Initialize variables for testing and create a sudoku.SudokuBoard")
     void initVars() {
         Set<Tile> tiles;
 
@@ -60,7 +66,7 @@ class SudokuBoardTest {
     }
 
     @Test
-    @DisplayName("Get the row-section containing a certain Position")
+    @DisplayName("Get the row-section containing a certain sudoku.Position")
     void boardReturnsRowSectionFromPosition() {
         Assertions.assertEquals(sectionRow, board.getRow(new Position(0,2)));
     }
@@ -72,26 +78,26 @@ class SudokuBoardTest {
     }
 
     @Test
-    @DisplayName("Get the column-section containing a certain Position")
+    @DisplayName("Get the column-section containing a certain sudoku.Position")
     void boardReturnsColumnSectionFromPosition() {
         Assertions.assertEquals(sectionColumn, board.getColumn(new Position(2,0)));
     }
 
     @Test
-    @DisplayName("Get the block-section for a certain Position")
+    @DisplayName("Get the block-section for a certain sudoku.Position")
     void createBoardReturnsBlockSection() {
         Assertions.assertEquals(sectionBlock, board.getBlock(new Position(4,4)));
     }
 
     @Test
-    @DisplayName("Get the Tile at a certain Position")
+    @DisplayName("Get the sudoku.Tile at a certain sudoku.Position")
     void boardReturnsCorrectTile() {
         Position position = new Position(4,2);
         Assertions.assertEquals(tile, board.getTile(position));
     }
 
     @Test
-    @DisplayName("Set the value of a Tile at a certain Position")
+    @DisplayName("Set the value of a sudoku.Tile at a certain sudoku.Position")
     void setValueOfTileReturnCorrectValue() {
         Position position = new Position(4,2);
         board.getTile(position).setEditable(true);
@@ -216,7 +222,7 @@ class SudokuBoardTest {
     }
 
     @Test
-    @DisplayName("Clears and sets every Tile's value to empty")
+    @DisplayName("Clears and sets every sudoku.Tile's value to empty")
     void clearAllEditableTilesReturnsZero() {
         Position position = new Position(4,2);
         board.getTile(position).setEditable(true);
