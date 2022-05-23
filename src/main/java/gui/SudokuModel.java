@@ -41,7 +41,7 @@ public class SudokuModel implements Model {
 
     @Override
     public int getValueAt(Position xy) {
-        return 0;
+        return -1;
     }
 
     @Override
