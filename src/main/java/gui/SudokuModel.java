@@ -15,7 +15,7 @@ public class SudokuModel implements Model {
     private final Factory factory;
     private final List<BoardChangeObserver> changeObservers;
     private final List<BoardSolvedObserver> solvedObservers;
-    private Board board;
+    @Nullable private Board board;
 
     public SudokuModel(Factory factory) {
         this.factory = factory;
