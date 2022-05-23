@@ -21,22 +21,22 @@ public class SudokuModel implements Model {
 
     @Override
     public void registerObserver(BoardChangeObserver observer) {
-
+        this.changeObservers.add(observer);
     }
 
     @Override
     public void removeObserver(BoardChangeObserver observer) {
-
+        this.changeObservers.remove(observer);
     }
 
     @Override
     public void registerObserver(BoardSolvedObserver observer) {
-
+        this.solvedObservers.add(observer);
     }
 
     @Override
     public void removeObserver(BoardSolvedObserver observer) {
-
+        this.solvedObservers.remove(observer);
     }
 
     @Override
