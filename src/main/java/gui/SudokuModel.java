@@ -1,12 +1,22 @@
 package gui;
 
+import sudoku.Board;
 import sudoku.Factory;
 import sudoku.Position;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 public class SudokuModel implements Model {
-    public SudokuModel(Factory factory) {
+    private final Factory factory;
+    private final List<BoardChangeObserver> changeObservers;
+    private final List<BoardSolvedObserver> solvedObservers;
+    private Board board;
 
+    public SudokuModel(Factory factory) {
+        this.factory = factory;
+        this.changeObservers = new ArrayList<>();
+        this.solvedObservers = new ArrayList<>();
     }
 
     @Override
