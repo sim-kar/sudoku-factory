@@ -4,15 +4,19 @@ import org.jetbrains.annotations.Nullable;
 import sudoku.Board;
 import sudoku.Factory;
 import sudoku.Position;
+import sudoku.Section;
 import sudoku.Tile;
 import javax.swing.SwingWorker;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 
 public class SudokuModel implements Model {
+    private final static int EMPTY = 0;
     private final Factory factory;
     private final List<BoardChangeObserver> changeObservers;
     private final List<BoardSolvedObserver> solvedObservers;
@@ -116,13 +120,43 @@ public class SudokuModel implements Model {
     }
 
     @Override
-    public Set<Position> getSectionsWithMistakes() {
-        return null;
+    public Set<Position> getSectionsWithMistakes() throws IllegalStateException {
+        if (board == null) throw new IllegalStateException("No puzzle has been created");
+
+        Set<Position> sectionsWithMistakes = new HashSet<>();
+
+        for (Section section : board.getIncorrectSections()) {
+            Set<Position> positions = new HashSet<>();
+            boolean hasUserMistake = false;
+
+            for (Tile tile : section.getTiles()) {
+                positions.add(tile.getPosition());
+
+                if (tile.isEditable() && (tile.getCurrentValue() != EMPTY)) {
+                    hasUserMistake = true;
+                }
+            }
+
+            if (hasUserMistake) sectionsWithMistakes.addAll(positions);
+        }
+
+        return sectionsWithMistakes;
     }
 
     @Override
-    public Set<Position> getSectionsWithMistakes(boolean ignoreEmptyTiles) {
-        return null;
+    public Set<Position> getSectionsWithMistakes(boolean ignoreEmptyTiles)
+            throws IllegalStateException {
+        if (board == null) throw new IllegalStateException("No puzzle has been created");
+
+        if (ignoreEmptyTiles) return getSectionsWithMistakes();
+
+        Set<Position> sectionsWithMistakes = new HashSet<>();
+
+        for (Section section : board.getIncorrectSections()) {
+            section.getTiles().forEach(tile -> sectionsWithMistakes.add(tile.getPosition()));
+        }
+
+        return sectionsWithMistakes;
     }
 
     @Override
