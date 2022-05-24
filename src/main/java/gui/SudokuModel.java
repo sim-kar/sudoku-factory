@@ -8,7 +8,6 @@ import sudoku.Section;
 import sudoku.Tile;
 import javax.swing.SwingWorker;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -131,76 +130,36 @@ public class SudokuModel implements Model {
         return getSectionWithMistakesHelper(ignoreEmptyTiles);
     }
 
-    private Set<Position> getSectionWithMistakesHelper(boolean ignoreEmptyTiles)
-            throws IllegalStateException {
-        if (board == null) throw new IllegalStateException("No puzzle has been created");
-
-        Set<Position> sectionsWithMistakes = new HashSet<>();
-
-        for (Section section : board.getIncorrectSections()) {
-            Set<Position> positions = new HashSet<>();
-            boolean hasUserMistake = false;
-
-            for (Tile tile : section.getTiles()) {
-                positions.add(tile.getPosition());
-
-                if (tile.isEditable() && (tile.getCurrentValue() != EMPTY)) {
-                    hasUserMistake = true;
-                }
-            }
-
-            if (!ignoreEmptyTiles || hasUserMistake) sectionsWithMistakes.addAll(positions);
-        }
-
-        return sectionsWithMistakes;
-    }
-
     @Override
-    public Set<Position> getDuplicates() throws IllegalStateException {
-        if (board == null) throw new IllegalStateException("No puzzle has been created");
-
-        Set<Position> duplicates = new HashSet<>();
-
-        for (Section section : board.getIncorrectSections()) {
-            Map<Integer, List<Tile>> tilesGroupedByValue = section.getTiles()
-                    .stream()
-                    .collect(Collectors.groupingBy(Tile::getCurrentValue));
-
-            for (List<Tile> tiles : tilesGroupedByValue.values()) {
-                if (tiles.size() > 1) {
-                    duplicates.addAll(
-                            tiles.stream()
-                                    .filter(Tile::isEditable)
-                                    .map(Tile::getPosition)
-                                    .collect(Collectors.toSet())
-                    );
-                }
-            }
-        }
-        return duplicates;
+    public Set<Position> getDuplicates() {
+        return getDuplicates(true);
     }
 
     @Override
     public Set<Position> getDuplicates(boolean editableOnly) throws IllegalStateException {
-        if (board == null) throw new IllegalStateException("No puzzle has been created");
+            if (board == null) throw new IllegalStateException("No puzzle has been created");
 
-        Set<Position> duplicates = new HashSet<>();
+            Set<Position> duplicates = new HashSet<>();
 
-        for (Section section : board.getIncorrectSections()) {
-            Map<Integer, List<Tile>> tilesGroupedByValue = section.getTiles()
-                    .stream()
-                    .collect(Collectors.groupingBy(Tile::getCurrentValue));
+            for (Section section : board.getIncorrectSections()) {
+                Map<Integer, List<Tile>> tilesGroupedByValue = section.getTiles()
+                        .stream()
+                        .collect(Collectors.groupingBy(Tile::getCurrentValue));
 
-            for (List<Tile> tiles : tilesGroupedByValue.values()) {
-                if (tiles.size() > 1) {
-                    duplicates.addAll(
-                            tiles.stream()
-                                    .map(Tile::getPosition)
-                                    .collect(Collectors.toSet())
-                    );
-                }
+                duplicates.addAll(
+                        tilesGroupedByValue.values()
+                                .stream()
+                                .filter(list -> list.size() > 1)
+                                .flatMap(List::stream)
+                                .filter(tile -> {
+                                    if (editableOnly) return tile.isEditable();
+                                    return true;
+                                })
+                                .map(Tile::getPosition)
+                                .collect(Collectors.toSet())
+                );
             }
-        }
-        return duplicates;
+
+            return duplicates;
     }
 }
