@@ -82,10 +82,18 @@ class SudokuModelTest {
                 new SudokuSection(new HashSet<>(Arrays.asList(tile7, tile8, tile9))),
         };
 
+        // to make the model testable, the factory returns the board defined above
+        // instead of creating a new random one
         when(factoryMock.create(anyInt())).thenReturn(new SudokuBoard(rows, columns, block));
 
         model = new SudokuModel(factoryMock);
 
+        /*
+        since create puzzle doesn't return anything, but rather sets a private field in the model
+        it cannot be mocked. And since the board is created in a background thread, we have to wait
+        for it. The thread only returns the above board, so it should be fast, but the thread still
+        has to be created and run which isn't instantaneous.
+         */
         CountDownLatch latch = new CountDownLatch(1);
         model.createPuzzle(40, latch);
         latch.await();
@@ -166,7 +174,7 @@ class SudokuModelTest {
 
         model.setValueAt(new Position(0, 1), 9);
 
-        // Position has an equals method, so two sets containing positions should be comparable
+        // Position has an equals method, so two sets containing positions are comparable
         assertEquals(sectionsWithUserMistakes, model.getSectionsWithMistakes());
     }
 
