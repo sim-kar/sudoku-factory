@@ -16,6 +16,10 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
+/**
+ * For playing Sudoku.
+ * {@inheritDoc}
+ */
 public class SudokuModel implements Model {
     private final static int EMPTY = 0;
     private final Factory factory;
@@ -23,6 +27,11 @@ public class SudokuModel implements Model {
     private final List<BoardSolvedObserver> solvedObservers;
     @Nullable private Board board;
 
+    /**
+     * Create a new Sudoku Model that uses the given factory to create Sudoku boards.
+     *
+     * @param factory the factory to use to create Sudoku boards.
+     */
     public SudokuModel(Factory factory) {
         this.factory = factory;
         this.changeObservers = new ArrayList<>();
@@ -39,6 +48,9 @@ public class SudokuModel implements Model {
         this.changeObservers.remove(observer);
     }
 
+    /**
+     * Notifies all registered board change observers in no particular order.
+     */
     private void notifyChangeObservers() {
         for (BoardChangeObserver observer : changeObservers) {
             observer.updateBoard();
@@ -55,6 +67,9 @@ public class SudokuModel implements Model {
         this.solvedObservers.remove(observer);
     }
 
+    /**
+     * Notifies all registered board solved observers in no particular order.
+     */
     private void notifySolvedObservers() {
         for (BoardSolvedObserver observer : solvedObservers) {
             observer.solved();
