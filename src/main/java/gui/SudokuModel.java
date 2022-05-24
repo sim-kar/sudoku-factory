@@ -63,15 +63,11 @@ public class SudokuModel implements Model {
 
     @Override
     public void createPuzzle(int clues) {
-        createPuzzleInBackground(clues, null);
+        createPuzzle(clues, null);
     }
 
     @Override
-    public void createPuzzle(int clues, CountDownLatch latch) {
-        createPuzzleInBackground(clues, latch);
-    }
-
-    private void createPuzzleInBackground(int clues, @Nullable CountDownLatch latch) {
+    public void createPuzzle(int clues, @Nullable CountDownLatch latch) {
         SwingWorker<Board, Void> worker = new SwingWorker<>() {
             @Override
             protected Board doInBackground() {
@@ -122,12 +118,32 @@ public class SudokuModel implements Model {
 
     @Override
     public Set<Position> getSectionsWithMistakes() {
-        return getSectionWithMistakesHelper(true);
+        return getSectionsWithMistakes(true);
     }
 
     @Override
-    public Set<Position> getSectionsWithMistakes(boolean ignoreEmptyTiles) {
-        return getSectionWithMistakesHelper(ignoreEmptyTiles);
+    public Set<Position> getSectionsWithMistakes(boolean ignoreEmptyTiles)
+            throws IllegalStateException {
+        if (board == null) throw new IllegalStateException("No puzzle has been created");
+
+        Set<Position> sectionsWithMistakes = new HashSet<>();
+
+        for (Section section : board.getIncorrectSections()) {
+            Set<Position> positions = new HashSet<>();
+            boolean hasUserMistake = false;
+
+            for (Tile tile : section.getTiles()) {
+                positions.add(tile.getPosition());
+
+                if (tile.isEditable() && (tile.getCurrentValue() != EMPTY)) {
+                    hasUserMistake = true;
+                }
+            }
+
+            if (!ignoreEmptyTiles || hasUserMistake) sectionsWithMistakes.addAll(positions);
+        }
+
+        return sectionsWithMistakes;
     }
 
     @Override
