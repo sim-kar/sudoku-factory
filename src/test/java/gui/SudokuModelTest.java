@@ -101,8 +101,8 @@ class SudokuModelTest {
 
     @Test
     @Timeout(value = 1000, unit = TimeUnit.MILLISECONDS)
-    @DisplayName("Creating a puzzle sets a new puzzle board")
-    void creatingAPuzzleCreatesANewPuzzle() throws InterruptedException {
+    @DisplayName("Creating a new puzzle sets the puzzle board to the new one")
+    void creatingAPuzzleSetsTheNewPuzzle() throws InterruptedException {
         Position position = new Position(0, 0);
 
         int valueInPuzzle = model.getValueAt(position);
