@@ -11,9 +11,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 public class SudokuModel implements Model {
     private final static int EMPTY = 0;
@@ -154,12 +156,51 @@ public class SudokuModel implements Model {
     }
 
     @Override
-    public Set<Position> getDuplicates() {
-        return null;
+    public Set<Position> getDuplicates() throws IllegalStateException {
+        if (board == null) throw new IllegalStateException("No puzzle has been created");
+
+        Set<Position> duplicates = new HashSet<>();
+
+        for (Section section : board.getIncorrectSections()) {
+            Map<Integer, List<Tile>> tilesGroupedByValue = section.getTiles()
+                    .stream()
+                    .collect(Collectors.groupingBy(Tile::getCurrentValue));
+
+            for (List<Tile> tiles : tilesGroupedByValue.values()) {
+                if (tiles.size() > 1) {
+                    duplicates.addAll(
+                            tiles.stream()
+                                    .filter(Tile::isEditable)
+                                    .map(Tile::getPosition)
+                                    .collect(Collectors.toSet())
+                    );
+                }
+            }
+        }
+        return duplicates;
     }
 
     @Override
-    public Set<Position> getDuplicates(boolean editableOnly) {
-        return null;
+    public Set<Position> getDuplicates(boolean editableOnly) throws IllegalStateException {
+        if (board == null) throw new IllegalStateException("No puzzle has been created");
+
+        Set<Position> duplicates = new HashSet<>();
+
+        for (Section section : board.getIncorrectSections()) {
+            Map<Integer, List<Tile>> tilesGroupedByValue = section.getTiles()
+                    .stream()
+                    .collect(Collectors.groupingBy(Tile::getCurrentValue));
+
+            for (List<Tile> tiles : tilesGroupedByValue.values()) {
+                if (tiles.size() > 1) {
+                    duplicates.addAll(
+                            tiles.stream()
+                                    .map(Tile::getPosition)
+                                    .collect(Collectors.toSet())
+                    );
+                }
+            }
+        }
+        return duplicates;
     }
 }
