@@ -210,17 +210,12 @@ class SudokuModelTest {
     void canGetAllDuplicates() {
         Position originalValue = new Position(0, 0);
         Position duplicate = new Position(0, 1);
-        Position originalValue2 = new Position(1, 0);
-        Position duplicate2 = new Position(1, 1);
         Set<Position> duplicatePositions = new HashSet<>(Arrays.asList(
                 originalValue,
-                duplicate,
-                originalValue2,
-                duplicate2
+                duplicate
         ));
 
         model.setValueAt(duplicate, 1);
-        model.setValueAt(duplicate2, 2);
 
         assertEquals(duplicatePositions, model.getDuplicates(false));
     }
