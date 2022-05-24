@@ -167,6 +167,7 @@ public class SudokuModel implements Model {
                                 .stream()
                                 .filter(list -> list.size() > 1)
                                 .flatMap(List::stream)
+                                .filter(tile -> tile.getCurrentValue() != EMPTY)
                                 .filter(tile -> {
                                     if (editableOnly) return tile.isEditable();
                                     return true;
