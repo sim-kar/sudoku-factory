@@ -120,7 +120,17 @@ public class SudokuModel implements Model {
     }
 
     @Override
-    public Set<Position> getSectionsWithMistakes() throws IllegalStateException {
+    public Set<Position> getSectionsWithMistakes() {
+        return getSectionWithMistakesHelper(true);
+    }
+
+    @Override
+    public Set<Position> getSectionsWithMistakes(boolean ignoreEmptyTiles) {
+        return getSectionWithMistakesHelper(ignoreEmptyTiles);
+    }
+
+    private Set<Position> getSectionWithMistakesHelper(boolean ignoreEmptyTiles)
+            throws IllegalStateException {
         if (board == null) throw new IllegalStateException("No puzzle has been created");
 
         Set<Position> sectionsWithMistakes = new HashSet<>();
@@ -137,23 +147,7 @@ public class SudokuModel implements Model {
                 }
             }
 
-            if (hasUserMistake) sectionsWithMistakes.addAll(positions);
-        }
-
-        return sectionsWithMistakes;
-    }
-
-    @Override
-    public Set<Position> getSectionsWithMistakes(boolean ignoreEmptyTiles)
-            throws IllegalStateException {
-        if (board == null) throw new IllegalStateException("No puzzle has been created");
-
-        if (ignoreEmptyTiles) return getSectionsWithMistakes();
-
-        Set<Position> sectionsWithMistakes = new HashSet<>();
-
-        for (Section section : board.getIncorrectSections()) {
-            section.getTiles().forEach(tile -> sectionsWithMistakes.add(tile.getPosition()));
+            if (!ignoreEmptyTiles || hasUserMistake) sectionsWithMistakes.addAll(positions);
         }
 
         return sectionsWithMistakes;
