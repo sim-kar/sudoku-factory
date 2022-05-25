@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -33,6 +34,7 @@ public class SudokuView extends JFrame implements BoardChangeObserver, BoardSolv
     private final static Color HINT = new Color(255, 240, 240);
     private final static Color DUPLICATE = Color.RED;
     private final static Color EDITABLE = Color.BLUE;
+    private final static Color SOLVED = new Color(230, 255, 230);
     private final static Color DARK = Color.DARK_GRAY;
     private final static Color LIGHT = Color.LIGHT_GRAY;
     private final static int EMPTY = 0;
@@ -207,7 +209,12 @@ public class SudokuView extends JFrame implements BoardChangeObserver, BoardSolv
 
     @Override
     public void solved() {
+        for (Position position : POSITIONS) {
+            tiles.get(position).setBackground(SOLVED);
+        }
 
+        selected = null;
+        repaint();
     }
 
     private int getBlockIndex(int x, int y) {
