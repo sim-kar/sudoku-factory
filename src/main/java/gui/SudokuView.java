@@ -170,6 +170,32 @@ public class SudokuView extends JFrame implements BoardChangeObserver, BoardSolv
 
     @Override
     public void updateBoard() {
+        for (Position position : POSITIONS) {
+            TileButton tile = tiles.get(position);
+            String value = (model.getValueAt(position) == EMPTY)
+                    ? ""
+                    : Integer.toString(model.getValueAt(position));
+            tile.setText(value);
+            tile.setForeground(DARK);
+            tile.setBackground(NEUTRAL);
+            tile.hint = false;
+
+            if (model.isEditable(position)) tile.setForeground(EDITABLE);
+        }
+
+        if (showDuplicates) {
+            for (Position duplicate : model.getDuplicates()) {
+                tiles.get(duplicate).setForeground(DUPLICATE);
+            }
+        }
+
+        if (showHints) {
+            for (Position position : model.getSectionsWithMistakes()) {
+                TileButton tile = tiles.get(position);
+                tile.setBackground(HINT);
+                tile.hint = true;
+            }
+        }
 
 
         board.setVisible(true);
