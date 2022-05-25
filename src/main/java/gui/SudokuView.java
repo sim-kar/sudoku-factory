@@ -27,10 +27,10 @@ import java.util.Map;
 
 public class SudokuView extends JFrame implements BoardChangeObserver, BoardSolvedObserver {
     private static final int DEFAULT_WIDTH = 800;
-    private static final int DEFAULT_HEIGHT = 600;
+    private static final int DEFAULT_HEIGHT = 681;
     private final static List<Position> POSITIONS = getPositions();
     private final static Color NEUTRAL = Color.WHITE;
-    private final static Color SELECTED = new Color(210, 240, 255);
+    private final static Color SELECTED = new Color(220, 240, 255);
     private final static Color HINT = new Color(255, 240, 240);
     private final static Color DUPLICATE = Color.RED;
     private final static Color EDITABLE = Color.BLUE;
@@ -150,6 +150,7 @@ public class SudokuView extends JFrame implements BoardChangeObserver, BoardSolv
         setTitle("Sudoku");
         setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setResizable(false);
         setLocationRelativeTo(null);
         setVisible(true);
     }
@@ -321,6 +322,7 @@ public class SudokuView extends JFrame implements BoardChangeObserver, BoardSolv
 
         TileButton(Position position) {
             this.position = position;
+            setFont(new Font("Arial", Font.BOLD, 26));
             setBackground(NEUTRAL);
             setForeground(DARK);
             setBorder(BorderFactory.createEmptyBorder());
