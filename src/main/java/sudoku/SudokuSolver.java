@@ -1,3 +1,5 @@
+package sudoku;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -266,12 +268,12 @@ public class SudokuSolver implements Solver {
         }
 
         if (board.length != BOARD_SIZE) {
-            throw new IllegalArgumentException("Board must have 9 rows");
+            throw new IllegalArgumentException("sudoku.Board must have 9 rows");
         }
 
         for (int[] row : board) {
             if (row.length != BOARD_SIZE) {
-                throw new IllegalArgumentException("Board must have 9 columns");
+                throw new IllegalArgumentException("sudoku.Board must have 9 columns");
             }
         }
     }

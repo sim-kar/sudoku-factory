@@ -1,3 +1,5 @@
+package sudoku;
+
 /**
  * A tile in on game board that contains a correct value, and a current value.
  * A tile can be made editable, which will clear it's current value. The current value can be
@@ -53,9 +55,9 @@ public interface Tile {
     boolean check();
 
     /**
-     * Get the Position of the Tile
+     * Get the sudoku.Position of the sudoku.Tile
      *
-     * @return the Position
+     * @return the sudoku.Position
      */
     public Position getPosition();
 }

@@ -1,3 +1,5 @@
+package sudoku;
+
 /**
  * Used to create new number puzzle boards.
  */

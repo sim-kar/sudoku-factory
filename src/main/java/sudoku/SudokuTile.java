@@ -1,3 +1,5 @@
+package sudoku;
+
 public class SudokuTile implements Tile {
     Position position;
     boolean editable = false;
@@ -5,10 +7,10 @@ public class SudokuTile implements Tile {
     int correctValue;
 
     /**
-     * Creates a SudokuTile with a certain value at a certain position
+     * Creates a sudoku.SudokuTile with a certain value at a certain position
      *
-     * @param value the value of the SudokuTile
-     * @param position the position of the SudokuTile
+     * @param value the value of the sudoku.SudokuTile
+     * @param position the position of the sudoku.SudokuTile
      */
     public SudokuTile(int value, Position position) {
         this.correctValue = value;

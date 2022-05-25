@@ -1,3 +1,5 @@
+package sudoku;
+
 /**
  * Used to generate solutions to number puzzle boards, such as Sudoku. Can also be used to check if
  * a board has a single, unique solution, which is a condition for a Sudoku puzzle to be valid.

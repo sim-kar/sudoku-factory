@@ -5,6 +5,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import sudoku.Board;
+import sudoku.Factory;
+import sudoku.Position;
+import sudoku.Section;
+import sudoku.Solver;
+import sudoku.SudokuBoard;
+import sudoku.SudokuFactory;
+import sudoku.SudokuSolver;
+import sudoku.Tile;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -76,7 +85,7 @@ class SudokuFactoryTest {
         Factory factory2 = new SudokuFactory(solver2);
         Board board2 = factory2.create(60);
 
-        // SudokuBoard doesn't have an equals method; convert to 2d arrays and compare
+        // sudoku.SudokuBoard doesn't have an equals method; convert to 2d arrays and compare
         int[][] matrixOfBoard = new int[9][9];
         for (int i = 0; i < 9; i++) {
             Section row = board.getRow(i);
