@@ -9,6 +9,8 @@ public class SudokuView extends JFrame implements BoardChangeObserver, BoardSolv
     public SudokuView(Model model, Controller controller) {
         this.model = model;
         this.controller = controller;
+        this.model.registerObserver((BoardChangeObserver) this);
+        this.model.registerObserver((BoardSolvedObserver) this);
     }
 
     @Override
