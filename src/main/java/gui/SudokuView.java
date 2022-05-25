@@ -197,6 +197,9 @@ public class SudokuView extends JFrame implements BoardChangeObserver, BoardSolv
             }
         }
 
+        if (selected != null) {
+            tiles.get(selected).setBackground(SELECTED);
+        }
 
         board.setVisible(true);
         repaint();
@@ -271,6 +274,7 @@ public class SudokuView extends JFrame implements BoardChangeObserver, BoardSolv
     private void createPuzzle(ActionEvent event) {
         Difficulty difficulty = difficulties.get((String) difficultyComboBox.getSelectedItem());
         controller.createPuzzle(difficulty);
+        selected = null;
     }
 
     // uses controller to set the value of the selected tile
