@@ -25,6 +25,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Presents a GUI representation of a Sudoku Puzzle Game. It has controls to select the difficulty
+ * and generate a new puzzle, and to enable or disable displaying hints and duplicates.
+ * A generated puzzle is displayed as an interactive board.
+ */
 public class SudokuView extends JFrame implements BoardChangeObserver, BoardSolvedObserver {
     private static final int DEFAULT_WIDTH = 800;
     private static final int DEFAULT_HEIGHT = 681;
@@ -50,6 +55,14 @@ public class SudokuView extends JFrame implements BoardChangeObserver, BoardSolv
     @Nullable
     private Position selected;
 
+    /**
+     * Create a new SudokuView with the given model and controller. Takes a model and a controller
+     * as parameter. The model holds the state of the Sudoku game, which this view will display.
+     * The controller is used to update the state of the model.
+     *
+     * @param model the model that will be used to display the Sudoku puzzle
+     * @param controller the controller that will be used to update the model
+     */
     public SudokuView(Model model, Controller controller) {
         this.model = model;
         this.controller = controller;
@@ -66,6 +79,9 @@ public class SudokuView extends JFrame implements BoardChangeObserver, BoardSolv
         difficulties.put("Expert", Difficulty.VERY_HARD);
     }
 
+    /**
+     * Generates a new view and displays it in a new window.
+     */
     public void createView() {
         // Board
         GridLayout grid = new GridLayout(3, 3);
@@ -92,7 +108,7 @@ public class SudokuView extends JFrame implements BoardChangeObserver, BoardSolv
         for (Position position : POSITIONS) {
             TileButton tile = new TileButton(position);
             tile.addActionListener(this::selectTile);
-            tile.addKeyListener(new TileValueListener());
+            tile.addKeyListener(new SetTileValueListener());
             tiles.put(position, tile);
 
             int blockIndex = getBlockIndex(position.getX(), position.getY());
@@ -155,6 +171,12 @@ public class SudokuView extends JFrame implements BoardChangeObserver, BoardSolv
         setVisible(true);
     }
 
+    /**
+     * Whether to show (user input) duplicates on the board or not. Uses a checkbox to toggle on
+     * or off.
+     *
+     * @param actionEvent the triggering event. Should come from a JCheckBox.
+     */
     private void toggleDuplicates(ActionEvent actionEvent) {
         if (actionEvent.getSource().getClass() == JCheckBox.class) {
             JCheckBox checkBox = (JCheckBox) actionEvent.getSource();
@@ -163,6 +185,12 @@ public class SudokuView extends JFrame implements BoardChangeObserver, BoardSolv
         }
     }
 
+    /**
+     * Whether to show hints (sections with errors) on the board or not. Uses a checkbox to toggle
+     * on or off.
+     *
+     * @param actionEvent the triggering event. Should come from a JCheckBox.
+     */
     private void toggleHints(ActionEvent actionEvent) {
         if (actionEvent.getSource().getClass() == JCheckBox.class) {
             JCheckBox checkBox = (JCheckBox) actionEvent.getSource();
@@ -171,6 +199,12 @@ public class SudokuView extends JFrame implements BoardChangeObserver, BoardSolv
         }
     }
 
+    /**
+     * Displays the Sudoku game board, based on the current state of the game. Will show
+     * duplicates and hints if enabled, and the selected tile if there is one.
+     * <br><br>
+     * {@inheritDoc}
+     */
     @Override
     public void updateBoard() {
         for (Position position : POSITIONS) {
@@ -208,6 +242,12 @@ public class SudokuView extends JFrame implements BoardChangeObserver, BoardSolv
         repaint();
     }
 
+    /**
+     * Sets the background of all tiles on the board to green, to signify that the board has been
+     * solved.
+     * <br><br>
+     * {@inheritDoc}
+     */
     @Override
     public void solved() {
         for (Position position : POSITIONS) {
@@ -218,34 +258,19 @@ public class SudokuView extends JFrame implements BoardChangeObserver, BoardSolv
         repaint();
     }
 
+    /**
+     * Get the index of the block (0-8) that the given x,y belongs to.
+     */
     private int getBlockIndex(int x, int y) {
-        /*
-        Indexes of all blocks:
-        | 0 | 1 | 2 |
-        | 3 | 4 | 5 |
-        | 6 | 7 | 8 |
-
-        The y-value divided by 3 (floor division) gives us a starting index
-        Adding the x-value divided by 3 (floor division) gives us the block index
-
-        Ex: the tiles in block 4 have the positions {3, 3} to {5, 5}
-            sudoku.Position {3, 3}:
-            row starting index: (3 // 3) * 3 = 3
-            column offset:      3 // 3       = 1
-            block index:        3 + 1        = 4
-
-            sudoku.Position {5, 5}:
-            row starting index: (5 // 3) * 3 = 3
-            column offset:      5 // 3       = 1
-            block index:        3 + 1        = 4
-         */
         int blockRowStartingIndex = (y / 3) * 3;
         int blockColumnOffset = x / 3;
 
         return blockRowStartingIndex + blockColumnOffset;
     }
 
-    // returns an unmodifiable list
+    /**
+     * Get an unmodifiable list of all positions on a 9x9 board.
+     */
     private static List<Position> getPositions() {
         List<Position> positions = new LinkedList<>();
 
@@ -258,7 +283,13 @@ public class SudokuView extends JFrame implements BoardChangeObserver, BoardSolv
         return Collections.unmodifiableList(positions);
     }
 
-    // select a clicked tile if it is editable
+    /**
+     * Select a tile. Only editable tiles can be selected. Selecting a tile changes the background
+     * color as a visual cue to the user; the previously selected tile will have its background
+     * color reset.
+     *
+     * @param event the triggering event. Should come from a TileButton
+     */
     private void selectTile(ActionEvent event) {
         if (event.getSource().getClass() == TileButton.class) {
             TileButton tile = (TileButton) event.getSource();
@@ -278,15 +309,23 @@ public class SudokuView extends JFrame implements BoardChangeObserver, BoardSolv
         }
     }
 
-    // uses controller to create a new puzzle
+    /**
+     * Create a new puzzle using the controller. The difficulty level currently selected in the
+     * difficulty combo box will be used to create the new puzzle.
+     */
     private void createPuzzle(ActionEvent event) {
         Difficulty difficulty = difficulties.get((String) difficultyComboBox.getSelectedItem());
         controller.createPuzzle(difficulty);
         selected = null;
     }
 
-    // uses controller to set the value of the selected tile
-    private class TileValueListener implements KeyListener {
+    /**
+     * Sets the value of the selected tile when pressing the matching key on the keyboard,
+     * using the controller.
+     * 1-9 sets the corresponding value.
+     * 0, delete and backspace clears the value.
+     */
+    private class SetTileValueListener implements KeyListener {
         @Override
         public void keyTyped(KeyEvent e) {}
 
@@ -316,6 +355,10 @@ public class SudokuView extends JFrame implements BoardChangeObserver, BoardSolv
 
     }
 
+    /**
+     * Represent a tile on a Sudoku board. Holds a reference to its position and whether it is
+     * a "hint", i.e. it is in a section that contains mistakes.
+     */
     private static class TileButton extends JButton {
         Position position;
         boolean hint;

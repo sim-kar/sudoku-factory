@@ -10,7 +10,16 @@ import sudoku.SudokuSolver;
 import java.awt.EventQueue;
 import java.util.Random;
 
+/**
+ * A Sudoku puzzle game application. Lets you generate new interactive Sudoku puzzles of varying
+ * difficulty, which are displayed along with controls.
+ */
 public class Sudoku {
+    /**
+     * Run the game in a new window.
+     *
+     * @param args not used
+     */
     public static void main(String... args) {
         EventQueue.invokeLater(() -> {
             Random random = new Random();
