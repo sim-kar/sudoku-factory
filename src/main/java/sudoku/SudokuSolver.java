@@ -60,15 +60,11 @@ public class SudokuSolver implements Solver {
         validateBoard(board);
 
         int[][] solution = copyBoard(board);
-        // try numbers in random order so that generated solutions will be different
-        // that way a solver it can be used to generate new sudoku boards
-        List<Integer> numbers = random.ints(MIN_VALUE, MAX_VALUE + 1)
-                .distinct()
-                .limit(MAX_VALUE)
+        List<Integer> numbers = IntStream.range(MIN_VALUE, MAX_VALUE + 1)
                 .boxed()
                 .collect(Collectors.toList());
 
-        if (solve(solution, numbers)) return solution;
+        if (solve(solution, numbers, true)) return solution;
 
         throw new IllegalArgumentException("There is no solution for the given board");
     }
@@ -84,18 +80,28 @@ public class SudokuSolver implements Solver {
      *
      * @param board the Sudoku board to try to solve
      * @param numbers an iterable containing the numbers 1-9. If there is more than one possible
-     *                solution, the order of the numbers will influence the generated solution.
+     *                solution, the order of the numbers will influence the generated solution
+     * @param shuffle whether to shuffle the order of the numbers when generating solution.
+     *                If not shuffled, a newly generated puzzle board will have repeating patterns
      * @return whether the board was solved or not
      */
-    private boolean solve(int[][] board, Iterable<Integer> numbers) {
+    private boolean solve(int[][] board, Iterable<Integer> numbers, boolean shuffle) {
         for (int row = BOARD_START_INDEX; row < BOARD_SIZE; row++) {
+            // shuffle the numbers to generate a random solution
+            if (shuffle) {
+                List<Integer> shuffledNumbers = new ArrayList<>();
+                numbers.forEach(shuffledNumbers::add);
+                Collections.shuffle(shuffledNumbers, random);
+                numbers = shuffledNumbers;
+            }
             for (int column = BOARD_START_INDEX; column < BOARD_SIZE; column++) {
                 if (board[row][column] == EMPTY) {
-
                     for (int number : numbers) {
                         board[row][column] = number;
 
-                        if (isValid(board, row, column) && solve(board, numbers)) return true;
+                        if (isValid(board, row, column) && solve(board, numbers, shuffle)) {
+                            return true;
+                        }
 
                         board[row][column] = EMPTY;
                     }
@@ -247,8 +253,8 @@ public class SudokuSolver implements Solver {
         List<Integer> descendingNumbers = new ArrayList<>(ascendingNumbers);
         Collections.reverse(descendingNumbers);
 
-        if (solve(ascendingSolution, ascendingNumbers)
-                && solve(descendingSolution, descendingNumbers)) {
+        if (solve(ascendingSolution, ascendingNumbers, false)
+                && solve(descendingSolution, descendingNumbers, false)) {
             return Arrays.deepEquals(ascendingSolution, descendingSolution);
         }
 
