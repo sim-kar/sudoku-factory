@@ -150,7 +150,9 @@ public class SudokuModel implements Model {
             for (Tile tile : section.getTiles()) {
                 positions.add(tile.getPosition());
 
-                if (tile.isEditable() && (tile.getCurrentValue() != EMPTY)) {
+                if (tile.isEditable()
+                        && (tile.getCurrentValue() != EMPTY)
+                        && (tile.getCurrentValue() != tile.getCorrectValue())) {
                     hasUserMistake = true;
                 }
             }
