@@ -22,7 +22,7 @@ class SudokuBoardTest {
     SudokuTile tile;
 
     @BeforeEach
-    @DisplayName("Initialize variables for testing and create a com.dt042g.group8.sudoku.SudokuBoard")
+    @DisplayName("Initialize variables for testing and create a SudokuBoard")
     void initVars() {
         Set<Tile> tiles;
 
@@ -68,7 +68,7 @@ class SudokuBoardTest {
     }
 
     @Test
-    @DisplayName("Get the row-section containing a certain com.dt042g.group8.sudoku.Position")
+    @DisplayName("Get the row-section containing a certain Position")
     void boardReturnsRowSectionFromPosition() {
         assertEquals(sectionRow, board.getRow(new Position(0,2)));
     }
@@ -80,26 +80,26 @@ class SudokuBoardTest {
     }
 
     @Test
-    @DisplayName("Get the column-section containing a certain com.dt042g.group8.sudoku.Position")
+    @DisplayName("Get the column-section containing a certain Position")
     void boardReturnsColumnSectionFromPosition() {
         assertEquals(sectionColumn, board.getColumn(new Position(2,0)));
     }
 
     @Test
-    @DisplayName("Get the block-section for a certain com.dt042g.group8.sudoku.Position")
+    @DisplayName("Get the block-section for a certain Position")
     void createBoardReturnsBlockSection() {
         assertEquals(sectionBlock, board.getBlock(new Position(4,4)));
     }
 
     @Test
-    @DisplayName("Get the com.dt042g.group8.sudoku.Tile at a certain com.dt042g.group8.sudoku.Position")
+    @DisplayName("Get the Tile at a certain Position")
     void boardReturnsCorrectTile() {
         Position position = new Position(4,2);
         assertEquals(tile, board.getTile(position));
     }
 
     @Test
-    @DisplayName("Set the value of a com.dt042g.group8.sudoku.Tile at a certain com.dt042g.group8.sudoku.Position")
+    @DisplayName("Set the value of a Tile at a certain Position")
     void setValueOfTileReturnCorrectValue() {
         Position position = new Position(4,2);
         board.getTile(position).setEditable(true);
@@ -224,7 +224,7 @@ class SudokuBoardTest {
     }
 
     @Test
-    @DisplayName("Clears and sets every com.dt042g.group8.sudoku.Tile's value to empty")
+    @DisplayName("Clears and sets every Tile's value to empty")
     void clearAllEditableTilesReturnsZero() {
         Position position = new Position(4,2);
         board.getTile(position).setEditable(true);

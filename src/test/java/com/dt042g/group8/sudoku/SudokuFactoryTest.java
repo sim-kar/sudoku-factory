@@ -29,7 +29,7 @@ class SudokuFactoryTest {
     Factory factory = new SudokuFactory(solver);
 
     /**
-     * 17 is the lowest limit of clues (filled in numbers in a com.dt042g.group8.Sudoku puzzle) where it is possible
+     * 17 is the lowest limit of clues (filled in numbers in a Sudoku puzzle) where it is possible
      * to have a single solution. Finding a new 17 hint puzzle is an astronomical challenge. For
      * our program to run decently fast we set the lower limit a bit higher.
      */
@@ -46,8 +46,8 @@ class SudokuFactoryTest {
     }
 
     /**
-     * 81 is the total number of tiles on a com.dt042g.group8.Sudoku board. Therefore, it shouldn't be possible to
-     * have more clues (filled in numbers in a com.dt042g.group8.Sudoku puzzle) than that.
+     * 81 is the total number of tiles on a Sudoku board. Therefore, it shouldn't be possible to
+     * have more clues (filled in numbers in a Sudoku puzzle) than that.
      */
     @Test
     @DisplayName("Creating board with more than 81 clues throws exception")
@@ -87,7 +87,7 @@ class SudokuFactoryTest {
         Factory factory2 = new SudokuFactory(solver2);
         Board board2 = factory2.create(60);
 
-        // com.dt042g.group8.sudoku.SudokuBoard doesn't have an equals method; convert to 2d arrays and compare
+        // SudokuBoard doesn't have an equals method; convert to 2d arrays and compare
         int[][] matrixOfBoard = new int[9][9];
         for (int i = 0; i < 9; i++) {
             Section row = board.getRow(i);
@@ -136,7 +136,7 @@ class SudokuFactoryTest {
     // tests which allows us to use such tests in this nested class
     @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     @Nested
-    @DisplayName("Conforms to com.dt042g.group8.Sudoku rules")
+    @DisplayName("Conforms to Sudoku rules")
     class SudokuRulesTest {
         Random random = new Random(0L);
         Solver solver = new SudokuSolver(random);

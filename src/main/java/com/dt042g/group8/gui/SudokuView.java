@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Presents a GUI representation of a com.dt042g.group8.Sudoku Puzzle Game. It has controls to select the difficulty
+ * Presents a GUI representation of a Sudoku Puzzle Game. It has controls to select the difficulty
  * and generate a new puzzle, and to enable or disable displaying hints and duplicates.
  * A generated puzzle is displayed as an interactive board.
  */
@@ -57,10 +57,10 @@ public class SudokuView extends JFrame implements BoardChangeObserver, BoardSolv
 
     /**
      * Create a new SudokuView with the given model and controller. Takes a model and a controller
-     * as parameter. The model holds the state of the com.dt042g.group8.Sudoku game, which this view will display.
+     * as parameter. The model holds the state of the Sudoku game, which this view will display.
      * The controller is used to update the state of the model.
      *
-     * @param model the model that will be used to display the com.dt042g.group8.Sudoku puzzle
+     * @param model the model that will be used to display the Sudoku puzzle
      * @param controller the controller that will be used to update the model
      */
     public SudokuView(Model model, Controller controller) {
@@ -163,7 +163,7 @@ public class SudokuView extends JFrame implements BoardChangeObserver, BoardSolv
         this.showHints = hints.isSelected();
 
         pack();
-        setTitle("com.dt042g.group8.Sudoku");
+        setTitle("Sudoku");
         setSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
@@ -200,7 +200,7 @@ public class SudokuView extends JFrame implements BoardChangeObserver, BoardSolv
     }
 
     /**
-     * Displays the com.dt042g.group8.Sudoku game board, based on the current state of the game. Will show
+     * Displays the Sudoku game board, based on the current state of the game. Will show
      * duplicates and hints if enabled, and the selected tile if there is one.
      * <br><br>
      * {@inheritDoc}
@@ -356,7 +356,7 @@ public class SudokuView extends JFrame implements BoardChangeObserver, BoardSolv
     }
 
     /**
-     * Represent a tile on a com.dt042g.group8.Sudoku board. Holds a reference to its position and whether it is
+     * Represent a tile on a Sudoku board. Holds a reference to its position and whether it is
      * a "hint", i.e. it is in a section that contains mistakes.
      */
     private static class TileButton extends JButton {

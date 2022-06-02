@@ -7,10 +7,10 @@ public class SudokuTile implements Tile {
     int correctValue;
 
     /**
-     * Creates a com.dt042g.group8.sudoku.SudokuTile with a certain value at a certain position
+     * Creates a SudokuTile with a certain value at a certain position
      *
-     * @param value the value of the com.dt042g.group8.sudoku.SudokuTile
-     * @param position the position of the com.dt042g.group8.sudoku.SudokuTile
+     * @param value the value of the SudokuTile
+     * @param position the position of the SudokuTile
      */
     public SudokuTile(int value, Position position) {
         this.correctValue = value;

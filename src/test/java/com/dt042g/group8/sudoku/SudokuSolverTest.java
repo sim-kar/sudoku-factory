@@ -92,7 +92,7 @@ class SudokuSolverTest {
         }
 
         /**
-         * Generating a solution can be used to generate a new com.dt042g.group8.Sudoku board from an empty board, but
+         * Generating a solution can be used to generate a new Sudoku board from an empty board, but
          * only if the generated solution is random. If the solution is always the same only the
          * same board can be generated!
          * <br>
@@ -113,7 +113,7 @@ class SudokuSolverTest {
         }
 
         @Nested
-        @DisplayName("Conforms to com.dt042g.group8.Sudoku rules")
+        @DisplayName("Conforms to Sudoku rules")
         class SudokuRulesTest {
             Solver solver;
             int[][] empty;
@@ -282,7 +282,7 @@ class SudokuSolverTest {
     }
 
     @Nested
-    @DisplayName("Checking if a com.dt042g.group8.Sudoku board is unique")
+    @DisplayName("Checking if a Sudoku board is unique")
     class BoardIsUniqueTest {
         Solver solver;
         int[][] board;

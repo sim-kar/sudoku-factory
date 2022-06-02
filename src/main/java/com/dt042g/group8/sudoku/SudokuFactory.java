@@ -10,10 +10,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Used to create valid com.dt042g.group8.Sudoku puzzle boards.
+ * Used to create valid Sudoku puzzle boards.
  */
 public class SudokuFactory implements Factory {
-    // 6,670,903,752,021,072,936,960 possible com.dt042g.group8.sudoku boards and so far around 49,000 puzzles with
+    // 6,670,903,752,021,072,936,960 possible sudoku boards and so far around 49,000 puzzles with
     // the lowest possible amount of clues (17) have been found. We need to set our lower limit
     // slightly higher than this...
     private static final int MIN_CLUES = 25;
@@ -22,7 +22,7 @@ public class SudokuFactory implements Factory {
     private final Solver solver;
 
     /**
-     * Create a new com.dt042g.group8.Sudoku factory.
+     * Create a new Sudoku factory.
      *
      * @param solver a solver used to generate new boards
      */
@@ -31,17 +31,17 @@ public class SudokuFactory implements Factory {
     }
 
     /**
-     * Create a valid com.dt042g.group8.Sudoku puzzle board. A com.dt042g.group8.Sudoku board is 9x9 tiles, where each row, column
+     * Create a valid Sudoku puzzle board. A Sudoku board is 9x9 tiles, where each row, column
      * and nine 3x3 blocks can only contain the numbers 1 to 9 without any duplicates. There are
      * also empty tiles to be filled in. For a board to be considered valid there can only be a
      * single solution.
      *
      * A board consists of empty tiles to be filled in, and clues which are tiles containing the
-     * correct number. A com.dt042g.group8.Sudoku board can have at most 81 clues, since there are 81 tiles. The
+     * correct number. A Sudoku board can have at most 81 clues, since there are 81 tiles. The
      * minimum amount of clues required by this method is 25.
      *
      * @param clues the number of correct tiles to show on the board
-     * @return a com.dt042g.group8.Sudoku puzzle board with the amount of supplied clues
+     * @return a Sudoku puzzle board with the amount of supplied clues
      */
     @Override
     public Board create(int clues) {
@@ -114,13 +114,13 @@ public class SudokuFactory implements Factory {
     }
 
     /**
-     * Get a com.dt042g.group8.Sudoku puzzle from a 9x9 2D array containing all the correct values on the board,
+     * Get a Sudoku puzzle from a 9x9 2D array containing all the correct values on the board,
      * and a 9x9 2D array containing the clues and empty tiles. The created board has the correct
      * value for each tile, and the empty tiles are editable and have their current value cleared.
      *
      * @param solution a 9x9 2D array with all correct values
      * @param puzzle a 9x9 2D array with all clues and empty tiles
-     * @return a 9x9 com.dt042g.group8.sudoku board with the tiles initialized according to the given parameters
+     * @return a 9x9 sudoku board with the tiles initialized according to the given parameters
      */
     private Board getBoard(int[][] solution, int[][] puzzle) {
         List<Set<Tile>> tilesInRows = Stream.generate(HashSet<Tile>::new)
@@ -177,12 +177,12 @@ public class SudokuFactory implements Factory {
         Adding the x-value divided by 3 (floor division) gives us the block index
 
         Ex: the tiles in block 4 have the positions {3, 3} to {5, 5}
-            com.dt042g.group8.sudoku.Position {3, 3}:
+            Position {3, 3}:
             row starting index: (3 // 3) * 3 = 3
             column offset:      3 // 3       = 1
             block index:        3 + 1        = 4
 
-            com.dt042g.group8.sudoku.Position {5, 5}:
+            Position {5, 5}:
             row starting index: (5 // 3) * 3 = 3
             column offset:      5 // 3       = 1
             block index:        3 + 1        = 4

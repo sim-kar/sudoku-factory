@@ -8,7 +8,7 @@ public class SudokuBoard implements Board{
     Map<Position, Section> blocks = new HashMap<>();
 
     /**
-     * The com.dt042g.group8.sudoku.SudokuBoard contains 9x9 Tiles and 27 Sections (one for each row, column, and 9 3x3 blocks
+     * The SudokuBoard contains 9x9 Tiles and 27 Sections (one for each row, column, and 9 3x3 blocks
      *
      * @param rows The rows as an array of Sections
      * @param columns The columns as an array of Sections

@@ -17,7 +17,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 /**
- * For playing com.dt042g.group8.Sudoku.
+ * For playing Sudoku.
  * {@inheritDoc}
  */
 public class SudokuModel implements Model {
@@ -28,9 +28,9 @@ public class SudokuModel implements Model {
     @Nullable private Board board;
 
     /**
-     * Create a new com.dt042g.group8.Sudoku Model that uses the given factory to create com.dt042g.group8.Sudoku boards.
+     * Create a new Sudoku Model that uses the given factory to create Sudoku boards.
      *
-     * @param factory the factory to use to create com.dt042g.group8.Sudoku boards.
+     * @param factory the factory to use to create Sudoku boards.
      */
     public SudokuModel(Factory factory) {
         this.factory = factory;

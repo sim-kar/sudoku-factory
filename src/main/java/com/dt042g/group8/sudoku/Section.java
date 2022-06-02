@@ -4,7 +4,7 @@ import java.util.Set;
 
 /**
  * A section of a game board represents a group of tiles with no duplicate numbers.
- * In com.dt042g.group8.Sudoku it can be a row, a column, or a 3 x 3 box.
+ * In Sudoku it can be a row, a column, or a 3 x 3 box.
  */
 public interface Section {
 

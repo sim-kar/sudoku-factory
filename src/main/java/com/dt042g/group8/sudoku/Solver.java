@@ -1,8 +1,8 @@
 package com.dt042g.group8.sudoku;
 
 /**
- * Used to generate solutions to number puzzle boards, such as com.dt042g.group8.Sudoku. Can also be used to check if
- * a board has a single, unique solution, which is a condition for a com.dt042g.group8.Sudoku puzzle to be valid.
+ * Used to generate solutions to number puzzle boards, such as Sudoku. Can also be used to check if
+ * a board has a single, unique solution, which is a condition for a Sudoku puzzle to be valid.
  */
 public interface Solver {
     /**

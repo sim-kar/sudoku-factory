@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * A com.dt042g.group8.Sudoku section represents a row, a column, or a 3x3 group of tiles in the game board.
+ * A Sudoku section represents a row, a column, or a 3x3 group of tiles in the game board.
  * All its tiles have unique (correct) numbers.
  */
 public class SudokuSection implements Section{
@@ -14,7 +14,7 @@ public class SudokuSection implements Section{
     private Map<Position, Tile> tiles = new HashMap<>();
 
     /**
-     * Adding all the passed Tiles to a Map, with everyone's com.dt042g.group8.sudoku.Position as its key.
+     * Adding all the passed Tiles to a Map, with everyone's Position as its key.
      *
      * @param tiles The tiles to add.
      */

@@ -97,7 +97,7 @@ class SudokuTileTest {
     }
 
     @Test
-    @DisplayName("Creating com.dt042g.group8.sudoku.SudokuTile with new com.dt042g.group8.sudoku.Position, returns com.dt042g.group8.sudoku.Position")
+    @DisplayName("Creating SudokuTile with new Position, returns Position")
     void CreateSudokuTileAndGetPosition() {
         tile = new SudokuTile(1, position);
         assertEquals(position, tile.getPosition());

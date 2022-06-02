@@ -13,7 +13,7 @@ import java.awt.EventQueue;
 import java.util.Random;
 
 /**
- * A com.dt042g.group8.Sudoku puzzle game application. Lets you generate new interactive com.dt042g.group8.Sudoku puzzles of varying
+ * A Sudoku puzzle game application. Lets you generate new interactive Sudoku puzzles of varying
  * difficulty, which are displayed along with controls.
  */
 public class Sudoku {

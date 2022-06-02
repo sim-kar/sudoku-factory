@@ -55,9 +55,9 @@ public interface Tile {
     boolean check();
 
     /**
-     * Get the com.dt042g.group8.sudoku.Position of the com.dt042g.group8.sudoku.Tile
+     * Get the Position of the Tile
      *
-     * @return the com.dt042g.group8.sudoku.Position
+     * @return the Position
      */
     public Position getPosition();
 }

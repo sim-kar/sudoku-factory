@@ -29,7 +29,7 @@ public class SudokuSectionTest {
     }
 
     @Test
-    @DisplayName("Creating a com.dt042g.group8.sudoku.Section and getting a com.dt042g.group8.sudoku.Tile at a specific position")
+    @DisplayName("Creating a Section and getting a Tile at a specific position")
     public void createdSectionReturnsCorrectTile() {
         SudokuSection section = new SudokuSection(tiles);
         Assertions.assertEquals(tile1, section.getTile(new Position(2,2)));
@@ -38,7 +38,7 @@ public class SudokuSectionTest {
     }
 
     @Test
-    @DisplayName("Creating a com.dt042g.group8.sudoku.Section and getting all Tiles from it")
+    @DisplayName("Creating a Section and getting all Tiles from it")
     public void createdSectionReturnsCorrectTiles() {
         SudokuSection section = new SudokuSection(tiles);
         Set<Tile> returnedTiles;
@@ -48,14 +48,14 @@ public class SudokuSectionTest {
     }
 
     @Test
-    @DisplayName("Creating a com.dt042g.group8.sudoku.Section of Tiles that all have correct values")
+    @DisplayName("Creating a Section of Tiles that all have correct values")
     public void createdSectionHasOnlyCorrectValues() {
         SudokuSection section = new SudokuSection(tiles);
         Assertions.assertTrue(section.isCorrect());
     }
 
     @Test
-    @DisplayName("Creating a com.dt042g.group8.sudoku.Section of Tiles that NOT all have correct values")
+    @DisplayName("Creating a Section of Tiles that NOT all have correct values")
     public void createdSectionHasIncorrectValues() {
         tile3.setEditable(true);
         tile3.setCurrentValue(9);
@@ -64,7 +64,7 @@ public class SudokuSectionTest {
     }
 
     @Test
-    @DisplayName("Creating a com.dt042g.group8.sudoku.Section of Tiles that NOT all have correct values, and get the incorrect ones")
+    @DisplayName("Creating a Section of Tiles that NOT all have correct values, and get the incorrect ones")
     public void createdSectionHasIncorrectValuesReturnsIncorrectTiles() {
         tile3.setEditable(true);
         tile3.setCurrentValue(9);
@@ -77,7 +77,7 @@ public class SudokuSectionTest {
     }
 
     @Test
-    @DisplayName("Creating a com.dt042g.group8.sudoku.Section of Tiles that all have correct values, and get the incorrect ones")
+    @DisplayName("Creating a Section of Tiles that all have correct values, and get the incorrect ones")
     public void createdSectionHasCorrectValuesReturnsNull() {
         SudokuSection section = new SudokuSection(tiles);
         Assertions.assertTrue(section.getIncorrectTiles().isEmpty());

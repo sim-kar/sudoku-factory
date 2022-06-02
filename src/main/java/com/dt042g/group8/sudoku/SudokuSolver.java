@@ -9,16 +9,16 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
- * Used to generate solutions to com.dt042g.group8.Sudoku puzzles, which are 9x9 grids that also contains nine 3x3
+ * Used to generate solutions to Sudoku puzzles, which are 9x9 grids that also contains nine 3x3
  * sub-grids, or blocks. A solved puzzle has a number between 1 and 9 in each tile in the grid, and
  * has no duplicate numbers in any of the rows, columns, or blocks on the grid.
  * <br>
  * If there are several solutions to a puzzle, the generated solution is random, i.e. two solutions
  * to the same puzzle are unlikely to be identical. Therefore, this solver can also be used to
- * generate filled in, random com.dt042g.group8.sudoku boards from which new com.dt042g.group8.Sudoku puzzles can be created.
+ * generate filled in, random sudoku boards from which new Sudoku puzzles can be created.
  * <br>
- * Can also be used to check if a com.dt042g.group8.Sudoku puzzle is unique, in other words if there is only one
- * possible solution. This is a requirement for a valid com.dt042g.group8.Sudoku puzzle.
+ * Can also be used to check if a Sudoku puzzle is unique, in other words if there is only one
+ * possible solution. This is a requirement for a valid Sudoku puzzle.
  */
 public class SudokuSolver implements Solver {
     private final static int BOARD_START_INDEX = 0;
@@ -30,7 +30,7 @@ public class SudokuSolver implements Solver {
     private final Random random;
 
     /**
-     * Create a new com.dt042g.group8.Sudoku solver with the given {@link Random}.
+     * Create a new Sudoku solver with the given {@link Random}.
      *
      * @param random a Random used to generate solutions
      */
@@ -41,15 +41,15 @@ public class SudokuSolver implements Solver {
     /**
      * {@inheritDoc}
      * <br>
-     * For a com.dt042g.group8.Sudoku board, empty tiles are represented by 0, and must be replaced with a number
+     * For a Sudoku board, empty tiles are represented by 0, and must be replaced with a number
      * between 1 and 9 in the solution. Additionally, the numbers filled in numbers (1-9) in each
      * row, column and block (one of nine 3x3 sub-grids) on the board must be unique.
      * If there is no solution that conforms to these constraints, or if the given board isn't
      * valid (contains numbers outside of the range 0-9; isn't a 9x9 grid; is null) an
      * IllegalArgumentException is thrown.
      *
-     * @param board the 9x9 com.dt042g.group8.Sudoku board to solve
-     * @return the solved com.dt042g.group8.Sudoku board with a number 1-9 in each tile that is unique for each row,
+     * @param board the 9x9 Sudoku board to solve
+     * @return the solved Sudoku board with a number 1-9 in each tile that is unique for each row,
      *         column and block.
      * @throws IllegalArgumentException if board doesn't have a solution, or if it is null,
      *                                  contains numbers outside the range 1-9, or isn't a 9x9 grid
@@ -70,7 +70,7 @@ public class SudokuSolver implements Solver {
     }
 
     /**
-     * Tries to generate a valid solution for the given com.dt042g.group8.Sudoku board. A valid solution is a solution
+     * Tries to generate a valid solution for the given Sudoku board. A valid solution is a solution
      * where every tile contains a number between 1 and 9, and there are no duplicate numbers in
      * any row, column, or 3x3 block.
      * If there isn't a valid solution for the board, it returns false.
@@ -78,7 +78,7 @@ public class SudokuSolver implements Solver {
      * are multiple solutions for the given board, different solutions can be found by changing the
      * order that numbers are tested.
      *
-     * @param board the com.dt042g.group8.Sudoku board to try to solve
+     * @param board the Sudoku board to try to solve
      * @param numbers an iterable containing the numbers 1-9. If there is more than one possible
      *                solution, the order of the numbers will influence the generated solution
      * @param shuffle whether to shuffle the order of the numbers when generating solution.
@@ -117,7 +117,7 @@ public class SudokuSolver implements Solver {
      * 1-9 that is not in already in the tile's row, column or 3x3 block (or is empty).
      * Since empty tiles aren't unique they also count as valid.
      *
-     * @param board the com.dt042g.group8.Sudoku board to use
+     * @param board the Sudoku board to use
      * @param row the row of the tile
      * @param column the of the tile
      * @return whether the number in the tile has no duplicates in its row, column or block
@@ -131,7 +131,7 @@ public class SudokuSolver implements Solver {
     /**
      * Checks if a row is valid, i.e. it doesn't contain any duplicates.
      *
-     * @param board the com.dt042g.group8.Sudoku board to use
+     * @param board the Sudoku board to use
      * @param row the row to check
      * @return whether the row contains duplicate numbers
      */
@@ -147,7 +147,7 @@ public class SudokuSolver implements Solver {
     /**
      * Checks if a column is valid, i.e. it doesn't contain any duplicates.
      *
-     * @param board the com.dt042g.group8.Sudoku board to use
+     * @param board the Sudoku board to use
      * @param column the column to check
      * @return whether the column contains duplicate numbers
      */
@@ -164,7 +164,7 @@ public class SudokuSolver implements Solver {
     /**
      * Checks if a 3x3 block is valid, i.e. it doesn't contain any duplicates.
      *
-     * @param board the com.dt042g.group8.Sudoku board to use
+     * @param board the Sudoku board to use
      * @param row the row of a tile in the block
      * @param column the column of a tile in the block
      * @return whether the block contains duplicate numbers
@@ -199,11 +199,11 @@ public class SudokuSolver implements Solver {
      * Since empty tiles aren't unique they also count as valid.
      * If there is an illegal number in the tile (<0 or >9) an exception will be thrown.
      *
-     * @param board the com.dt042g.group8.Sudoku board to use
+     * @param board the Sudoku board to use
      * @param row the row of the tile
      * @param column the column of the tile
      * @param takenNumbers an array of booleans representing the taken numbers in a section
-     *                     (row, column, or block) of the com.dt042g.group8.Sudoku board
+     *                     (row, column, or block) of the Sudoku board
      * @return whether the number in the tile is already taken
      * @throws IllegalArgumentException if the number in the tile at row and column is <0 or >9
      */
@@ -233,11 +233,11 @@ public class SudokuSolver implements Solver {
     /**
      * {@inheritDoc}
      * <br>
-     * The board must be a valid 9x9 com.dt042g.group8.Sudoku board, with tiles that are either empty (0), or has
+     * The board must be a valid 9x9 Sudoku board, with tiles that are either empty (0), or has
      * a number between 1 and 9.
      *
-     * @param board the com.dt042g.group8.Sudoku board to check if it only has one solution
-     * @return whether the com.dt042g.group8.Sudoku board only has one solution
+     * @param board the Sudoku board to check if it only has one solution
+     * @return whether the cSudoku board only has one solution
      * @throws IllegalArgumentException if the board is null, the wrong size, or contains a number
      *                                  outside the range 0-9
      */
@@ -264,7 +264,7 @@ public class SudokuSolver implements Solver {
     /**
      * Throws an exception if the board is the wrong size, or if it is null.
      *
-     * @param board the com.dt042g.group8.Sudoku board to validate
+     * @param board the Sudoku board to validate
      * @throws IllegalArgumentException if the board is null, or has the wrong number of rows or
      *                                  columns
      */
@@ -274,12 +274,12 @@ public class SudokuSolver implements Solver {
         }
 
         if (board.length != BOARD_SIZE) {
-            throw new IllegalArgumentException("com.dt042g.group8.sudoku.Board must have 9 rows");
+            throw new IllegalArgumentException("Board must have 9 rows");
         }
 
         for (int[] row : board) {
             if (row.length != BOARD_SIZE) {
-                throw new IllegalArgumentException("com.dt042g.group8.sudoku.Board must have 9 columns");
+                throw new IllegalArgumentException("Board must have 9 columns");
             }
         }
     }
