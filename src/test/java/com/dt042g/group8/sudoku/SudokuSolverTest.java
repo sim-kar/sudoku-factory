@@ -4,9 +4,6 @@ import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import com.dt042g.group8.sudoku.Position;
-import com.dt042g.group8.sudoku.Solver;
-import com.dt042g.group8.sudoku.SudokuSolver;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -23,6 +20,9 @@ class SudokuSolverTest {
         Solver solver;
         int[][] empty;
 
+        /**
+         * Creates an empty 9x9 board.
+         */
         @BeforeEach
         void setup() {
             Random random = new Random(0L);
@@ -119,6 +119,9 @@ class SudokuSolverTest {
             int[][] empty;
             int[][] solution;
 
+            /**
+             * Creates a 9x9 Sudoku board to test that it conforms to Sudoku rules.
+             */
             @BeforeEach
             void setup() {
                 Random random = new Random(0L);
@@ -147,6 +150,10 @@ class SudokuSolverTest {
             }
 
 
+            /**
+             * Creates a set from the numbers in each row. Since there are 9 numbers in each
+             * row, if any set doesn't have exactly 9 numbers then there must be a duplicate,
+             */
             @Test
             @DisplayName("Rows in generated solution have no duplicates")
             void rowsInSolutionHasNoDuplicates() {
@@ -190,6 +197,10 @@ class SudokuSolverTest {
                 );
             }
 
+            /**
+             * Creates a set from the numbers in each column. Since there are 9 numbers in each
+             * column, if any set doesn't have exactly 9 numbers then there must be a duplicate.
+             */
             @Test
             @DisplayName("Columns in generated solution have no duplicates")
             void columnsInSolutionHasNoDuplicates() {
@@ -242,6 +253,18 @@ class SudokuSolverTest {
                 );
             }
 
+            /**
+             * Creates a set from the numbers in each block. Since there are 9 numbers in each
+             * block, if any set doesn't have exactly 9 numbers then there must be a duplicate.
+             *
+             * To get the blocks, a hashmap with a position for each block is used:
+             * <br>
+             * (0, 0) (1, 0) (2, 0) <br>
+             * (0, 1) (1, 1) (2, 1) <br>
+             * (0, 2) (1, 2) (2, 2) <br>
+             *
+             * All numbers in a block are added to the set at the corresponding position in the map.
+             */
             @Test
             @DisplayName("Blocks in generated solution have no duplicates")
             void blocksInSolutionHasNoDuplicates() {
@@ -287,6 +310,9 @@ class SudokuSolverTest {
         Solver solver;
         int[][] board;
 
+        /**
+         * Sets up an empty 9x9 board.
+         */
         @BeforeEach
         void setup() {
             Random random = new Random(0L);
@@ -357,10 +383,24 @@ class SudokuSolverTest {
             assertThrows(IllegalArgumentException.class, () -> solver.isUnique(board));
         }
 
+        /**
+         * Uses this unsolvable board:
+         * <br>
+         * 5, 1, 6, 8, 4, 9, 7, 3, 2 <br>
+         * 3, 0, 7, 6, 0, 5, 0, 0, 0 <br>
+         * 8, 0, 9, 7, 0, 0, 0, 6, 5 <br>
+         * 1, 3, 5, 0, 6, 0, 9, 0, 7 <br>
+         * 4, 7, 2, 5, 9, 1, 0, 0, 6 <br>
+         * 9, 6, 8, 3, 7, 0, 0, 5, 0 <br>
+         * 2, 5, 3, 1, 8, 6, 0, 7, 4 <br>
+         * 6, 8, 4, 2, 0, 7, 5, 0, 0 <br>
+         * 7, 9, 1, 0, 5, 0, 6, 0, 8 <br>
+         * <br>
+         * Taken from <a href="https://sudokudragon.com/unsolvable.htm">here</a>.
+         */
         @Test
         @DisplayName("Checking if a board with no possible solution is unique throws error")
         void boardWithNoSolutionReturnsFalse() {
-            // board is taken from https://sudokudragon.com/unsolvable.htm
             board = new int[][]{
                     {5, 1, 6, 8, 4, 9, 7, 3, 2},
                     {3, 0, 7, 6, 0, 5, 0, 0, 0},
@@ -376,10 +416,24 @@ class SudokuSolverTest {
             assertThrows(IllegalArgumentException.class, () -> solver.isUnique(board));
         }
 
+        /**
+         * Uses this board with a single solution:
+         * <br>
+         * 5, 3, 0, 0, 7, 0, 0, 0, 0 <br>
+         * 6, 0, 0, 1, 9, 5, 0, 0, 0 <br>
+         * 0, 9, 8, 0, 0, 0, 0, 6, 0 <br>
+         * 8, 0, 0, 0, 6, 0, 0, 0, 3 <br>
+         * 4, 0, 0, 8, 0, 3, 0, 0, 1 <br>
+         * 7, 0, 0, 0, 2, 0, 0, 0, 6 <br>
+         * 0, 6, 0, 0, 0, 0, 2, 8, 0 <br>
+         * 0, 0, 0, 4, 1, 9, 0, 0, 5 <br>
+         * 0, 0, 0, 0, 8, 0, 0, 7, 9 <br>
+         * <br>
+         * Taken from taken from <a href="https://en.wikipedia.org/wiki/Sudoku">here</a>.
+         */
         @Test
         @DisplayName("Checking if a board with one solution is unique returns true")
         void boardWithOneSolutionReturnsTrue() {
-            // board taken from https://en.wikipedia.org/wiki/Sudoku
             board = new int[][]{
                     {5, 3, 0, 0, 7, 0, 0, 0, 0},
                     {6, 0, 0, 1, 9, 5, 0, 0, 0},
@@ -395,10 +449,24 @@ class SudokuSolverTest {
             assertTrue(solver.isUnique(board));
         }
 
+        /**
+         * Uses this board with multiple solutions:
+         * <br>
+         * 0, 8, 0, 0, 0, 9, 7, 4, 3 <br>
+         * 0, 5, 0, 0, 0, 8, 0, 1, 0 <br>
+         * 0, 1, 0, 0, 0, 0, 0, 0, 0 <br>
+         * 8, 0, 0, 0, 0, 5, 0, 0, 0 <br>
+         * 0, 0, 0, 8, 0, 4, 0, 0, 0 <br>
+         * 0, 0, 0, 3, 0, 0, 0, 0, 6 <br>
+         * 0, 0, 0, 0, 0, 0, 0, 7, 0 <br>
+         * 0, 3, 0, 5, 0, 0, 0, 8, 0 <br>
+         * 9, 7, 2, 4, 0, 0, 0, 5, 0 <br>
+         * <br>
+         * Taken from <a href="https://sudokudragon.com/unsolvable.htm">here</a>.
+         */
         @Test
         @DisplayName("Checking if a board with multiple solution is unique returns false")
         void boardWithMultipleSolutionReturnsFalse() {
-            // board is taken from https://sudokudragon.com/unsolvable.htm
             board = new int[][]{
                     {0, 8, 0, 0, 0, 9, 7, 4, 3},
                     {0, 5, 0, 0, 0, 8, 0, 1, 0},

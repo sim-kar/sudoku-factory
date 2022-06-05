@@ -45,11 +45,11 @@ class SudokuViewTest {
      * Tests for the helper method getBlockIndex. If this method needs to be changed or
      * removed for refactoring don't hesitate to disable or remove this nested class!
      *
-     * Each block contains 9 tiles, and each tile has an (x, y) position starting at (0, 0).
-     * Indexes of all blocks:
-     * | 0 | 1 | 2 |
-     * | 3 | 4 | 5 |
-     * | 6 | 7 | 8 |
+     * Each block contains 9 tiles, and each tile has an (x, y) position starting at (0, 0). <br>
+     * Indexes of all blocks: <br>
+     * | 0 | 1 | 2 | <br>
+     * | 3 | 4 | 5 | <br>
+     * | 6 | 7 | 8 | <br>
      */
     @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     @Nested

@@ -6,12 +6,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
-import com.dt042g.group8.sudoku.Position;
-import com.dt042g.group8.sudoku.Section;
-import com.dt042g.group8.sudoku.SudokuBoard;
-import com.dt042g.group8.sudoku.SudokuSection;
-import com.dt042g.group8.sudoku.SudokuTile;
-import com.dt042g.group8.sudoku.Tile;
 
 class SudokuBoardTest {
     SudokuSection[] rows = new SudokuSection[1];
@@ -21,6 +15,24 @@ class SudokuBoardTest {
     SudokuBoard board;
     SudokuTile tile;
 
+    /**
+     * Set up a board with a few tiles for testing. Has one row, one column and one block
+     * with three tiles each:
+     * <br>
+     * - - 1 - - - - - - <br>
+     * - - - - - - - - - <br>
+     * 3 - - - 1 - - 7 - <br>
+     * - - - 3 - - - - - <br>
+     * - - 3 - 1 - - - - <br>
+     * - - - - - 7 - - - <br>
+     * - - - - - - - - - <br>
+     * - - - - - - - - - <br>
+     * - - 7 - - - - - - <br>
+     * <br>
+     * Row 2: (0, 2), (4, 2), (7, 2).
+     * Column 2: (2, 0), (2, 4), (2, 8).
+     * Block 4: (3, 3), (4, 4), (5, 5)
+     */
     @BeforeEach
     @DisplayName("Initialize variables for testing and create a SudokuBoard")
     void initVars() {
@@ -106,6 +118,9 @@ class SudokuBoardTest {
         assertThrows(IllegalArgumentException.class, () -> board.getTile(position));
     }
 
+    /**
+     * Changes the value of tile (4, 2) from 1 to 7.
+     */
     @Test
     @DisplayName("Set the value of a Tile at a certain Position")
     void setValueOfTileReturnCorrectValue() {
@@ -127,13 +142,16 @@ class SudokuBoardTest {
     }
 
     @Test
-    @DisplayName("Check if all Tiles have the correct value")
+    @DisplayName("Check if the board is correct when all Tiles have the correct value")
     void checkAllTilesReturnTrue() {
         assertTrue(board.isCorrect());
     }
 
+    /**
+     * Changes the value of tile (4, 2) from its correct value 1 to the incorrect value 7.
+     */
     @Test
-    @DisplayName("Check if all Tiles have the correct value")
+    @DisplayName("Check if the board is not correct when all Tiles do not have the correct value")
     void checkAllTilesReturnFalse() {
         Position position = new Position(4,2);
         board.getTile(position).setEditable(true);
@@ -142,8 +160,12 @@ class SudokuBoardTest {
         assertFalse(board.isCorrect());
     }
 
+    /**
+     * Changes the value of tile (4, 2) in row 2 from its correct value 1 to the incorrect value 7,
+     * so that row two becomes incorrect.
+     */
     @Test
-    @DisplayName("Getting incorrect sections returns a list of all incorrect sections")
+    @DisplayName("Getting incorrect sections returns a section if it is incorrect")
     void getIncorrectSectionsReturnsList() {
         Position position = new Position(4,2);
         board.getTile(position).setEditable(true);
@@ -155,8 +177,18 @@ class SudokuBoardTest {
         );
     }
 
+    /**
+     * Sets up a small board with three rows, three columns and one block: <br>
+     *
+     * 1 4 7 <br>
+     * 2 5 8 <br>
+     * 3 6 9 <br>
+     *
+     * Changing the correct value 3 to the incorrect value 1 means that row 2, column 0 and
+     * block 0 become incorrect.
+     */
     @Test
-    @DisplayName("Getting several incorrect sections returns list of all incorrect sections")
+    @DisplayName("Getting incorrect sections returns all incorrect sections when there are many")
     void getIncorrectSectionsReturnsSeveral() {
 
         Tile tile1 = new SudokuTile(1,new Position(3,3));
@@ -242,7 +274,7 @@ class SudokuBoardTest {
     }
 
     @Test
-    @DisplayName("Clears and sets every Tile's value to empty")
+    @DisplayName("Clearing the board sets editable tiles to 0")
     void clearAllEditableTilesReturnsZero() {
         Position position = new Position(4,2);
         board.getTile(position).setEditable(true);

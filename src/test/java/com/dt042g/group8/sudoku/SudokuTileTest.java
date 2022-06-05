@@ -1,8 +1,6 @@
 package com.dt042g.group8.sudoku;
 
 import org.junit.jupiter.api.*;
-import com.dt042g.group8.sudoku.Position;
-import com.dt042g.group8.sudoku.SudokuTile;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -12,7 +10,7 @@ class SudokuTileTest {
     Position position = new Position(1,2);
 
     @Test
-    @DisplayName("Comparing the retrieved correct number with the one set")
+    @DisplayName("Getting the correct value from a tile returns the correct value")
     void compareCorrectNumber() {
         tile = new SudokuTile(1, position);
         assertEquals(1, tile.getCorrectValue());
@@ -22,7 +20,7 @@ class SudokuTileTest {
     }
 
     @Test
-    @DisplayName("Tests setting and getting the editable field")
+    @DisplayName("Setting a tile to editable makes it editable")
     void SetGetEditable() {
         tile = new SudokuTile(1, position);
 
@@ -34,7 +32,7 @@ class SudokuTileTest {
     }
 
     @Test
-    @DisplayName("Set and get number of current value")
+    @DisplayName("Setting the current value of an editable tile updates the value")
     void setGetCurrentVal() {
         tile = new SudokuTile(1, position);
         tile.setEditable(true);
@@ -46,7 +44,7 @@ class SudokuTileTest {
     }
 
     @Test
-    @DisplayName("Test that it is not possible to change current number while isEditable is false")
+    @DisplayName("Setting the current value of a non-editable tile does not update the value")
     void setCurrentNotEditable() {
         tile = new SudokuTile(1, position);
         tile.setEditable(true);
@@ -57,7 +55,7 @@ class SudokuTileTest {
     }
 
     @Test
-    @DisplayName("Clearing an editable tile should return a current value of 0")
+    @DisplayName("Clearing an editable tile returns a current value of 0")
     void canClearEditable() {
         tile = new SudokuTile(1, position);
         tile.setEditable(true);
@@ -71,7 +69,7 @@ class SudokuTileTest {
     }
 
     @Test
-    @DisplayName("Clearing an non-editable tile should not change the current value")
+    @DisplayName("Clearing an non-editable tile does not change the current value")
     void cannotClearNonEditable() {
         tile = new SudokuTile(1, position);
         tile.setEditable(false);
@@ -80,7 +78,7 @@ class SudokuTileTest {
     }
 
     @Test
-    @DisplayName("Same current and correct number should return true")
+    @DisplayName("Checking a tile with same current and correct value returns true")
     void sameCurrentCorrectValueIsTrue() {
         tile = new SudokuTile(1, position);
         tile.setCurrentValue(1);
@@ -88,7 +86,7 @@ class SudokuTileTest {
     }
 
     @Test
-    @DisplayName("Different current and correct number should return false")
+    @DisplayName("Checking a tile with different current and correct value should return false")
     void sameCurrentCorrectValueIsFalse() {
         tile = new SudokuTile(1, position);
         tile.setEditable(true);
@@ -97,7 +95,7 @@ class SudokuTileTest {
     }
 
     @Test
-    @DisplayName("Creating SudokuTile with new Position, returns Position")
+    @DisplayName("Getting the position of a tile returns the correct position")
     void CreateSudokuTileAndGetPosition() {
         tile = new SudokuTile(1, position);
         assertEquals(position, tile.getPosition());

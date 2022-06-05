@@ -7,15 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import com.dt042g.group8.sudoku.Board;
-import com.dt042g.group8.sudoku.Factory;
-import com.dt042g.group8.sudoku.Position;
-import com.dt042g.group8.sudoku.Section;
-import com.dt042g.group8.sudoku.Solver;
-import com.dt042g.group8.sudoku.SudokuBoard;
-import com.dt042g.group8.sudoku.SudokuFactory;
-import com.dt042g.group8.sudoku.SudokuSolver;
-import com.dt042g.group8.sudoku.Tile;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -31,7 +22,7 @@ class SudokuFactoryTest {
     /**
      * 17 is the lowest limit of clues (filled in numbers in a Sudoku puzzle) where it is possible
      * to have a single solution. Finding a new 17 hint puzzle is an astronomical challenge. For
-     * our program to run decently fast we set the lower limit a bit higher.
+     * our program to run decently fast we set the lower limit a bit higher at 25.
      */
     @Test
     @DisplayName("Creating board with less than 25 clues throws exception")
@@ -76,6 +67,11 @@ class SudokuFactoryTest {
         assertEquals(40, allTiles - incorrectTiles.size());
     }
 
+    /**
+     * Creates two boards with different seeds given to the {@link Random} used to generate them.
+     * Comparing the boards will only compare the objects, not their values. So they are converted
+     * to 2d arrays that can be compared.
+     */
     @Test
     @DisplayName("Creating a new board should not return the same board every time")
     void createdBoardsAreRandomized() {
@@ -113,8 +109,11 @@ class SudokuFactoryTest {
         assertNotEquals(matrixOfBoard, matrixOfBoard2);
     }
 
+    /**
+     * The board must be converted to a 2d array to be used as input to the solver.
+     */
     @Test
-    @DisplayName("Created boards are unique")
+    @DisplayName("Created board has a single unique solution")
     void createdBoardsAreUnique() {
         Board board = factory.create(30);
 
@@ -143,6 +142,9 @@ class SudokuFactoryTest {
         Factory factory = new SudokuFactory(solver);
         Board board = factory.create(40);
 
+        /**
+         * Returns all 9 rows on the board in ascending order.
+         */
         Set<Section> rows() {
             Set<Section> rows = new HashSet<>();
             for (int i = 0; i < 9; i++) {
@@ -151,6 +153,9 @@ class SudokuFactoryTest {
             return rows;
         }
 
+        /**
+         * Returns all 9 columns on the board in ascending order.
+         */
         Set<Section> columns() {
             Set<Section> columns = new HashSet<>();
             for (int i = 0; i < 9; i++) {
@@ -159,8 +164,19 @@ class SudokuFactoryTest {
             return columns;
         }
 
+        /**
+         * Returns all 9 blocks on the board in ascending order.
+         */
         Set<Section> blocks() {
             Set<Section> blocks = new HashSet<>();
+
+            /*
+            Each block is 3x3 tiles, starting from position (0, 0). So the starting position for
+            each block is:
+            (0, 0), (3, 0), (6, 0),
+            (0, 3), (3, 3), (6, 3),
+            (0, 6), (3, 6), (6, 6)
+             */
             for (int y = 0; y <= 6; y += 3) {
                 for (int x = 0; x <= 6; x += 3) {
                     blocks.add(board.getBlock(new Position(x, y)));
