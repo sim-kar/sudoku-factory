@@ -117,6 +117,16 @@ class SudokuBoardTest {
     }
 
     @Test
+    @DisplayName(
+            "Setting the value of a Tile at a position not on the board does not throw exception"
+    )
+    void setValueOfTileNotOnBoardDoesNotThrowException() {
+        Position position = new Position(99,99);
+
+        assertDoesNotThrow(() -> board.setTile(position,7));
+    }
+
+    @Test
     @DisplayName("Check if all Tiles have the correct value")
     void checkAllTilesReturnTrue() {
         assertTrue(board.isCorrect());
