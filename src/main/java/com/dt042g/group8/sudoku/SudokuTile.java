@@ -1,5 +1,9 @@
 package com.dt042g.group8.sudoku;
 
+/**
+ * A single {@link Tile} on a Sudoku puzzle board. It has a position, a correct value, a current
+ * value, and can be either editable or not editable.
+ */
 public class SudokuTile implements Tile {
     Position position;
     boolean editable = false;

@@ -2,8 +2,7 @@ package com.dt042g.group8.sudoku;
 
 /**
  * A tile in on game board that contains a correct value, and a current value.
- * A tile can be made editable, which will clear it's current value. The current value can be
- * changed if it is editable, and it can be compared to the correct value to see if they match.
+ * A tile can be made editable, which makes it possible to change the current value.
  */
 public interface Tile {
 
