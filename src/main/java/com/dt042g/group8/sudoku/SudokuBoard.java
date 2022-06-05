@@ -73,14 +73,27 @@ public class SudokuBoard implements Board{
         return this.blocks.get(xy);
     }
 
+
+    /**
+     * {@inheritDoc}
+     *
+     * @throws IllegalArgumentException if the given Position isn't on the board
+     */
     @Override
-    public Tile getTile(Position xy) {
+    public Tile getTile(Position xy) throws IllegalArgumentException {
+        if (!rows.containsKey(xy)) {
+            throw new IllegalArgumentException("There is no tile at the given Position");
+        }
+
         Section section = rows.get(xy);
         return section.getTile(xy);
     }
 
     @Override
     public void setTile(Position xy, int value) {
+        // will throw null pointer exception if xy is not in map otherwise
+        if (!rows.containsKey(xy)) return;
+
         Section section = rows.get(xy);
         Tile tile = section.getTile(xy);
         tile.setCurrentValue(value);

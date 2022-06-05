@@ -99,6 +99,14 @@ class SudokuBoardTest {
     }
 
     @Test
+    @DisplayName("Getting a Tile for a position not on the board throws illegal argument exception")
+    void gettingATilePositionNotOnBoardThrowsIllegalArgumentException() {
+        Position position = new Position(99,99);
+
+        assertThrows(IllegalArgumentException.class, () -> board.getTile(position));
+    }
+
+    @Test
     @DisplayName("Set the value of a Tile at a certain Position")
     void setValueOfTileReturnCorrectValue() {
         Position position = new Position(4,2);
@@ -106,6 +114,16 @@ class SudokuBoardTest {
         board.setTile(position,7);
 
         assertEquals(7, board.getTile(position).getCurrentValue());
+    }
+
+    @Test
+    @DisplayName(
+            "Setting the value of a Tile at a position not on the board does not throw exception"
+    )
+    void setValueOfTileNotOnBoardDoesNotThrowException() {
+        Position position = new Position(99,99);
+
+        assertDoesNotThrow(() -> board.setTile(position,7));
     }
 
     @Test
