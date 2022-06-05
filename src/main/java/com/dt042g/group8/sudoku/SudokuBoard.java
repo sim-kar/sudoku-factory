@@ -73,8 +73,18 @@ public class SudokuBoard implements Board{
         return this.blocks.get(xy);
     }
 
+
+    /**
+     * {@inheritDoc}
+     *
+     * @throws IllegalArgumentException if the given Position isn't on the board
+     */
     @Override
-    public Tile getTile(Position xy) {
+    public Tile getTile(Position xy) throws IllegalArgumentException {
+        if (!rows.containsKey(xy)) {
+            throw new IllegalArgumentException("There is no tile at the given Position");
+        }
+
         Section section = rows.get(xy);
         return section.getTile(xy);
     }
