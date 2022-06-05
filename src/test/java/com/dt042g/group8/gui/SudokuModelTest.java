@@ -30,14 +30,22 @@ class SudokuModelTest {
     @Mock Factory factoryMock;
     Model model;
 
+    /**
+     * Set up a simple 3x3 board that will be created in SudokuModel for testing.
+     * Beside the rows and columns, it will have three blocks:
+     * <br>
+     * Block 0 has the positions (0, 0), (1, 0), (0, 1).
+     * Block 1 has the positions (2, 0), (1, 1), (2, 1).
+     * Block 2 has the positions (0, 2), (1, 2), (2, 2).
+     * <br>
+     * The tiles in row 1 are editable and empty.
+     */
     @BeforeEach
     @Timeout(value = 1000, unit = TimeUnit.MILLISECONDS)
     void setup() throws InterruptedException {
         factoryMock = mock(SudokuFactory.class);
 
         /*
-        create a simple 3x3 board to use in SudokuModel for testing:
-
         board:                     solution:
         -------------------        -------------------
         |  1     2  |  3  |        |  1     2  |  3  |
@@ -99,6 +107,12 @@ class SudokuModelTest {
         latch.await();
     }
 
+    /**
+     * Changes a value in the created puzzle, then creates a new puzzle and compares the value at
+     * the same position in the new puzzle to ensure that the new puzzle has overwritten the old
+     * one.
+     * The created puzzles are always the same from {@link SudokuModelTest#setup()}.
+     */
     @Test
     @Timeout(value = 1000, unit = TimeUnit.MILLISECONDS)
     @DisplayName("Creating a new puzzle sets the puzzle board to the new one")
@@ -156,6 +170,10 @@ class SudokuModelTest {
         );
     }
 
+    /**
+     * Setting an incorrect value at (0, 1) should return all incorrect sections on the board from
+     * {@link SudokuModelTest#setup()}: row 1, column 0 and block 0.
+     */
     @Test
     @DisplayName("Can get all positions in sections with mistakes made by a user")
     void canGetSectionsWithUserMistakes() {
@@ -168,7 +186,9 @@ class SudokuModelTest {
                 new Position( 1, 1),
                 new Position( 2, 1),
                 // block; see @BeforeAll above for an illustration
-                new Position( 1, 0)
+                new Position( 0, 0),
+                new Position( 1, 0),
+                new Position( 0, 1)
         ));
 
 
@@ -178,8 +198,12 @@ class SudokuModelTest {
         assertEquals(sectionsWithUserMistakes, model.getSectionsWithMistakes());
     }
 
+    /**
+     * There is an empty tile in each row, so all positions in those sections should be returned,
+     * which is every single position on the board.
+     */
     @Test
-    @DisplayName("Can get all positions in sections with mistakes")
+    @DisplayName("Can get all positions in sections with mistakes when counting empty tiles")
     void canGetSectionsWithAllMistakes() {
         // since there is a mistake in each column, the set should contain all positions
         Set<Position> sectionsWithMistakes = new HashSet<>();
@@ -192,6 +216,10 @@ class SudokuModelTest {
         assertEquals(sectionsWithMistakes, model.getSectionsWithMistakes(false));
     }
 
+    /**
+     * Sets two duplicate values in editable positions: (0, 1) with value 1 has a duplicate in
+     * its column and block; (1, 1) with value 2 has a duplicate in its column.
+     */
     @Test
     @DisplayName("Can get all editable positions that are duplicates")
     void canGetAllEditableDuplicates() {
@@ -205,6 +233,10 @@ class SudokuModelTest {
         assertEquals(duplicatePositions, model.getDuplicates());
     }
 
+    /**
+     * Sets a duplicate at position (0, 1) with value 1. Position (0, 0) in the same column and
+     * block is also 1, so they are duplicates.
+     */
     @Test
     @DisplayName("Can get all positions that are duplicates")
     void canGetAllDuplicates() {
@@ -231,6 +263,9 @@ class SudokuModelTest {
         verify(observerMock).updateBoard();
     }
 
+    /**
+     * Filling out the empty tiles on row 1 with the values 4, 5, 6 solves the board.
+     */
     @Test
     @DisplayName("Registered observers are notified when the board is solved")
     void observersAreNotifiedWhenBoardIsSolved() {
@@ -258,6 +293,9 @@ class SudokuModelTest {
         verify(observerMock, times(1)).updateBoard();
     }
 
+    /**
+     * Filling out the empty tiles on row 1 with the values 4, 5, 6 solves the board.
+     */
     @Test
     @DisplayName("Removed observers are not notified when the board is solved")
     void removedObserversAreNotNotifiedWhenBoardIsSolved() {
