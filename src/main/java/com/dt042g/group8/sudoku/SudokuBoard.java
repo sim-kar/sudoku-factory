@@ -91,6 +91,9 @@ public class SudokuBoard implements Board{
 
     @Override
     public void setTile(Position xy, int value) {
+        // will throw null pointer exception if xy is not in map otherwise
+        if (!rows.containsKey(xy)) return;
+
         Section section = rows.get(xy);
         Tile tile = section.getTile(xy);
         tile.setCurrentValue(value);
