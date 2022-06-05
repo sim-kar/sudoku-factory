@@ -3,7 +3,7 @@ package com.dt042g.group8.sudoku;
 import java.util.List;
 
 /**
- * A sudoku.Board represents the game board and holds references to all Sections and Tiles of the game
+ * Represents a number puzzle game board that holds references to all Sections and Tiles of the game
  */
 public interface Board {
 
