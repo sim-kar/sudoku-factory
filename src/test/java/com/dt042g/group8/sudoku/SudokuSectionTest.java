@@ -4,10 +4,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import com.dt042g.group8.sudoku.Position;
-import com.dt042g.group8.sudoku.SudokuSection;
-import com.dt042g.group8.sudoku.SudokuTile;
-import com.dt042g.group8.sudoku.Tile;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,6 +12,13 @@ public class SudokuSectionTest {
     Set<Tile> tiles;
     Tile tile1, tile2, tile3;
 
+    /**
+     * Creates a set of tiles that can be used to create a section.
+     * The tiles are:
+     * Position (2, 2), value 1.
+     * Position (2, 5), value 5.
+     * Position (9, 9), value 8.
+     */
     @BeforeEach
     public void setupFakeSet() {
         tiles = new HashSet<>();
@@ -29,7 +32,7 @@ public class SudokuSectionTest {
     }
 
     @Test
-    @DisplayName("Creating a Section and getting a Tile at a specific position")
+    @DisplayName("Getting a tile at a specific position from a section returns the correct tile")
     public void createdSectionReturnsCorrectTile() {
         SudokuSection section = new SudokuSection(tiles);
         Assertions.assertEquals(tile1, section.getTile(new Position(2,2)));
@@ -38,7 +41,7 @@ public class SudokuSectionTest {
     }
 
     @Test
-    @DisplayName("Creating a Section and getting all Tiles from it")
+    @DisplayName("Getting all tiles from a section returns all tiles")
     public void createdSectionReturnsCorrectTiles() {
         SudokuSection section = new SudokuSection(tiles);
         Set<Tile> returnedTiles;
@@ -48,14 +51,18 @@ public class SudokuSectionTest {
     }
 
     @Test
-    @DisplayName("Creating a Section of Tiles that all have correct values")
+    @DisplayName("The section is correct if all tiles in it are correct")
     public void createdSectionHasOnlyCorrectValues() {
         SudokuSection section = new SudokuSection(tiles);
         Assertions.assertTrue(section.isCorrect());
     }
 
+    /**
+     * Changes the value of a tile in the section from the correct value 8 to the
+     * incorrect value 9.
+     */
     @Test
-    @DisplayName("Creating a Section of Tiles that NOT all have correct values")
+    @DisplayName("The section is not correct if all tiles in it are not correct")
     public void createdSectionHasIncorrectValues() {
         tile3.setEditable(true);
         tile3.setCurrentValue(9);
@@ -64,7 +71,7 @@ public class SudokuSectionTest {
     }
 
     @Test
-    @DisplayName("Creating a Section of Tiles that NOT all have correct values, and get the incorrect ones")
+    @DisplayName("Getting incorrect tiles from a section returns all incorrect tiles")
     public void createdSectionHasIncorrectValuesReturnsIncorrectTiles() {
         tile3.setEditable(true);
         tile3.setCurrentValue(9);
@@ -77,8 +84,8 @@ public class SudokuSectionTest {
     }
 
     @Test
-    @DisplayName("Creating a Section of Tiles that all have correct values, and get the incorrect ones")
-    public void createdSectionHasCorrectValuesReturnsNull() {
+    @DisplayName("Getting incorrect tiles from a section without any returns an empty set")
+    public void createdSectionHasCorrectValuesReturnsEmpty() {
         SudokuSection section = new SudokuSection(tiles);
         Assertions.assertTrue(section.getIncorrectTiles().isEmpty());
     }
