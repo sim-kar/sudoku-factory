@@ -17,8 +17,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 /**
- * For playing Sudoku.
- * {@inheritDoc}
+ * Provides the parts and functionality for playing Sudoku, keeping track of the state of the
+ * game.
  */
 public class SudokuModel implements Model {
     private final static int EMPTY = 0;
