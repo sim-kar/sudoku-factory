@@ -2,7 +2,10 @@ package com.dt042g.group8.sudoku;
 
 import java.util.*;
 
-public class SudokuBoard implements Board{
+/**
+ * A Sudoku puzzle board that contains {@link Section}s and {@link Tile}s.
+ */
+public class SudokuBoard implements Board {
     Map<Position, Section> rows = new HashMap<>();
     Map<Position, Section> columns = new HashMap<>();
     Map<Position, Section> blocks = new HashMap<>();
