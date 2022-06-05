@@ -1,5 +1,6 @@
 package com.dt042g.group8.sudoku;
 
+import org.jetbrains.annotations.Nullable;
 import java.util.Objects;
 
 /**
@@ -46,7 +47,7 @@ public class Position {
     }
 
     @Override
-    public boolean equals(Object otherObject) {
+    public boolean equals(@Nullable Object otherObject) {
         if (this == otherObject) return true;
         if (otherObject == null) return false;
         if (getClass() != otherObject.getClass()) return false;
