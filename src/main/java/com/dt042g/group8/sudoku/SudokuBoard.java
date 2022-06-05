@@ -1,5 +1,6 @@
 package com.dt042g.group8.sudoku;
 
+import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 public class SudokuBoard implements Board{
@@ -48,26 +49,31 @@ public class SudokuBoard implements Board{
 
     }
 
+    @Nullable
     @Override
     public Section getRow(int y) {
         return this.rows.get(new Position(0, y));
     }
 
+    @Nullable
     @Override
     public Section getRow(Position xy) {
         return this.rows.get(xy);
     }
 
+    @Nullable
     @Override
     public Section getColumn(int x) {
         return this.columns.get(new Position(x, 0));
     }
 
+    @Nullable
     @Override
     public Section getColumn(Position xy) {
         return this.columns.get(xy);
     }
 
+    @Nullable
     @Override
     public Section getBlock(Position xy) {
         return this.blocks.get(xy);
