@@ -17,6 +17,8 @@ An app for generating and playing random Sudoku puzzles of varying difficulty.
 - Lets the user play the generated Sudoku puzzle in a graphical user interface, which can 
   provide visual feedback on duplicates in a grid, or provide hints on grids, columns and rows 
   that are incorrect. It was implemented using Java Swing, and the MVC pattern.
+- Uses a backtracking algorithm to generate new puzzles and ensure that they only have a single 
+  solution.
 - The project was created in collaboration with another developer using the agile methodology 
   [Kanban](https://www.atlassian.com/agile/kanban) and [Test-Driven Development](https://en.wikipedia.org/wiki/Test-driven_development).
   The used workflow and guidelines can be seen in detail [here](workflow.md).
